@@ -8887,7 +8887,7 @@ ES6新引入了Promise标准，同时浏览器实现上多了一个`microtask`�
 
 图解:
 
-![js_eventloop](/Users/johnny/Downloads/md/draft/images/js_eventloop.jpg)
+![js_eventloop](./media/js_eventloop.jpg)
 
 ## 执行栈
 
@@ -8929,7 +8929,7 @@ console.log('Inside Global Execution Context');
 
 图解执行栈:
 
-![exceute_stack](/Users/johnny/Downloads/md/draft/images/exceute_stack.jpg)
+![exceute_stack](./media/exceute_stack.jpg)
 
 
 
