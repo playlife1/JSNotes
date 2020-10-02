@@ -1,6 +1,6 @@
 # 概述
 
-这个 repository 是我在学习 JavaScript 时所整理的笔记, 配合 Typore 大纲视图快速定位到知识点, 稳固而知新.
+这个 repository 是我在学习 JavaScript 时所整理的笔记, 配合 Typora 大纲视图快速定位到知识点, 稳固而知新.
 
 同时随着自己的对于  JavaScript 学习和理解的不断加深, 其中的内容也在不断的更新.
 
