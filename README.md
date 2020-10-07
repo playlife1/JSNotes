@@ -1,3 +1,22 @@
+# 项目目录
+
+> 10.7 更新
+
+```
+├── Ajax 
+│   └── Ajax.md
+├── README.md
+├── jQuery
+│   └── jQuery.md
+└── notes
+    ├── BOM 和 DOM.md
+    ├── ES6 和补充.md
+    ├── JavaScript.md
+    └── media (图片文件)
+```
+
+
+
 # 概述
 
 这个 repository 是我在学习 JavaScript 时所整理的笔记, 配合 Typora 大纲视图快速定位到知识点, 稳固而知新.
@@ -26,3 +45,21 @@ O’REILLY 系列的图书都非常经典,值的多看, 不断学习
 
 2020. 10.2 新上传了 jQuery Ajax 和一些单独拿出来的 JS部分笔记 
 大家中秋🎑&&国庆🎉 双节快乐! (迟到的祝福㊗️) 😊
+
+
+
+2020. 10.7 更新项目目录
+
+```txt
+├── Ajax 
+│   └── Ajax.md
+├── README.md
+├── jQuery
+│   └── jQuery.md
+└── notes
+    ├── BOM 和 DOM.md
+    ├── ES6 和补充.md
+    ├── JavaScript.md
+    └── media (图片文件)
+```
+
