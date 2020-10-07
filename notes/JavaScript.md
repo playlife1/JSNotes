@@ -8887,7 +8887,7 @@ ES6新引入了Promise标准，同时浏览器实现上多了一个`microtask`�
 
 图解:
 
-![js_eventloop](./media/js_eventloop.jpg)
+![js_eventloop](/Users/johnny/Downloads/md/draft/images/js_eventloop.jpg)
 
 ## 执行栈
 
@@ -8929,7 +8929,64 @@ console.log('Inside Global Execution Context');
 
 图解执行栈:
 
-![exceute_stack](./media/exceute_stack.jpg)
+![exceute_stack](/Users/johnny/Downloads/md/draft/images/exceute_stack.jpg)
 
 
 
+
+
+# 知识碎片 🧩
+
+> 在开发、学习过程中查缺补漏
+
+# String.prototype.includes()
+
+> 这个方法已经被加入到 ECMAScript 6 标准中, 这个方法已经被加入到 ECMAScript 6 标准中
+
+> **`includes()`** 方法用于判断一个字符串是否包含在另一个字符串中，根据情况返回 true 或 false。
+
+语法:
+
+> searchString 要在此字符串中搜索的字符串。
+>
+> [position] 可选 从当前字符串的哪个索引位置开始搜寻子字符串，默认值为 `0`。
+
+```js
+str.includes(searchString[, position])
+```
+
+注意⚠️: `includes()` 方法是区分大小写的。 
+
+例子:
+
+```js
+var str = 'abcdef'
+console.log(str.includes('a')); // 包含a 因此返回true
+console.log(str.includes('b')); // 包含b 因此返回true
+console.log(str.includes('m')); // 不包含m 因此返回false
+var str = 'To be, or not to be, that is the question.';
+console.log(str.includes('To be'));       // true
+console.log(str.includes('question'));    // true
+console.log(str.includes('nonexistent')); // false
+console.log(str.includes('To be', 1));    // false
+console.log(str.includes('TO BE'));       // false 区分大小写
+```
+
+兼容补丁 polyfill 方法 :
+
+```js
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) {
+    'use strict';
+    if (typeof start !== 'number') {
+      start = 0;
+    }
+    
+    if (start + search.length > this.length) {
+      return false;
+    } else {
+      return this.indexOf(search, start) !== -1;
+    }
+  };
+}
+```
