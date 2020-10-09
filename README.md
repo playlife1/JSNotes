@@ -1,18 +1,19 @@
 # 项目目录
 
-> 10.7 更新
+> 10.9更新
 
-```
-├── Ajax 
+```txt
+├── Ajax
 │   └── Ajax.md
 ├── README.md
 ├── jQuery
 │   └── jQuery.md
 └── notes
-    ├── BOM 和 DOM.md
-    ├── ES6 和补充.md
     ├── JavaScript.md
-    └── media (图片文件)
+    ├── archive (归档,旧文章,舍不得删)
+    │   ├── BOM 和 DOM.md
+    │   └── ES6 和补充.md
+    └── media(文章图片)     
 ```
 
 
@@ -61,5 +62,21 @@ O’REILLY 系列的图书都非常经典,值的多看, 不断学习
     ├── ES6 和补充.md
     ├── JavaScript.md
     └── media (图片文件)
+```
+
+2020.10.9 更新项目目录
+
+```txt
+├── Ajax
+│   └── Ajax.md
+├── README.md
+├── jQuery
+│   └── jQuery.md
+└── notes
+    ├── JavaScript.md
+    ├── archive (归档,旧文章,舍不得删)
+    │   ├── BOM 和 DOM.md
+    │   └── ES6 和补充.md
+    └── media(文章图片)    
 ```
 

@@ -8030,7 +8030,7 @@ promise
 >
 > 因为 `Promise.prototype.then` 和 `Promise.prototype.catch` 方法返回promise 对象， 所以它们可以被链式调用。
 
-![promises](media/promises.png)
+![promises](./media/promises.png)
 
 （1）当 new Promise()执行之后，promise 对象的状态会被初始化为`pending`，这个状态是初始化状态。`new Promise()`这行代码，括号里的内容是同步执行的。括号里定义一个 function，function 有两个参数：resolve 和 reject。如下：
 
@@ -8803,7 +8803,7 @@ JavaScript 脚本加载完成时, JS 引擎会去预解析JS代码, 为代码中
 
 每一个 JavaScript 程序都有且只有一个默认的「全局执行上下文」, 在浏览器环境中它指向 `Window`
 
-![exceute_stack](/Users/johnny/Downloads/md/draft/images/exceute_stack.jpg)
+![exceute_stack](./media/exceute_stack.jpg)
 
 
 
@@ -8923,7 +8923,7 @@ ES6新引入了Promise标准，同时浏览器实现上多了一个`microtask`�
 
 图解:
 
-![js_eventloop](/Users/johnny/Downloads/md/draft/images/js_eventloop.jpg)
+![js_eventloop](./media/js_eventloop.jpg)
 
 ## 执行栈
 
@@ -8965,7 +8965,7 @@ console.log('Inside Global Execution Context');
 
 图解执行栈:
 
-![exceute_stack](/Users/johnny/Downloads/md/draft/images/exceute_stack.jpg)
+![exceute_stack](./media/exceute_stack.jpg)
 
 
 
