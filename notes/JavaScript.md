@@ -2314,6 +2314,42 @@ encodeURIComponent();//把字符串作为 URI 组件进行编码 可以编码特
 decodeURIComponent();//把字符串作为 URI 组件进行解码
 ```
 
+## URL
+
+> Web API > URL
+
+**`URL`**接口用于解析，构造，规范化和编码 URLs。 
+
+如果浏览器尚不支持`URL()`构造函数，则可以使用`Window`中的`Window.URL`属性。 确保检查您的任何目标浏览器是否要求对此添加前缀。
+
+### 静态方法
+
+#### URL.createObjectURL()
+
+> 静态方法会创建一个 `DOMString`，其中包含一个表示参数中给出的对象的URL。这个 URL 的生命周期和创建它的窗口中的 `document`绑定。这个新的URL 对象表示指定的 `File`对象或 `Blob` 对象。
+
+**语法:**
+
+```js
+objectURL = URL.createObjectURL(object);
+```
+
+**参数**:
+
+*object*
+
+用于创建 URL 的 `File` 对象、`Blob` 对象或者 `MediaSource` 对象。
+
+*返回值*
+
+一个`DOMString`包含了一个对象URL，该URL可用于指定源 `object`的内容。
+
+**示例:**
+
+查看[使用对象URL显示图片](https://developer.mozilla.org/zh-CN/docs/Using_files_from_web_applications#Example.3A_Using_object_URLs_to_display_images)
+
+
+
 # JSON 的介绍（for…in…）‼️
 
 > 对象字面量和 json 比较像，这里我们对 json 做一个简单介绍。
