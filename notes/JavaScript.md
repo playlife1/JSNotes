@@ -9026,3 +9026,181 @@ if (!String.prototype.includes) {
   };
 }
 ```
+
+# HTMLCanvasElement
+
+## toDataURL() //Base64
+
+`HTMLCanvasElement.toDataURL()`
+
+> 返回一个数据URL，该URL包含由类型参数指定的格式的图像（默认为`png`）。 返回的图像分辨率为96dpi。
+>
+
+**`HTMLCanvasElement.toDataURL()`** 方法返回一个包含图片展示的 data URI。可以使用 `type` 参数其类型，默认为 PNG 格式。图片的分辨率为96dpi。
+
+- 如果画布的高度或宽度是0，那么会返回字符串“`data:,”。`
+- 如果传入的类型非“`image/png`”，但是返回的值以“`data:image/png`”开头，那么该传入的类型是不支持的。
+- Chrome支持“`image/webp`”类型。
+
+语法：
+
+```js
+canvas.toDataURL(type, encoderOptions);
+```
+
+参数:
+
+- `type` 可选
+
+  图片格式，默认为 `image/png`
+
+- `encoderOptions` 可选
+
+  在指定图片格式为 `image/jpeg 或` `image/webp的情况下，可以从 0 到 1 的区间内选择图片的质量`。如果超出取值范围，将会使用默认值 `0.92`。其他参数会被忽略。
+
+返回值:
+
+包含 [data URI](https://developer.mozilla.org/en-US/docs/Web/HTTP/data_URIs) 的[`DOMString`](https://developer.mozilla.org/zh-CN/docs/Web/API/DOMString)。
+
+> data URI 格式`data:[<mediatype>][;base64],<data>` 此方法返回的 DOMString 默认为Base 64
+
+## toBlob() // Blob 对象
+
+`HTMLCanvasElement.toBlob()`
+
+> 创建一个`Blob` 对象，表示canvas中包含的图像； 该文件可以由用户代理决定是否缓存在磁盘上或存储在内存中。
+>
+
+**`HTMLCanvasElement.toBlob()`** 方法创造`Blob`对象，用以展示canvas上的图片；这个图片文件可以被缓存或保存到本地，由用户代理端自行决定。如不特别指明，图片的类型默认为 image/png，分辨率为96dpi。
+
+第三个参数用于针对image/jpeg格式的图片进行输出图片的质量设置。
+
+语法：
+
+```js
+canvas.toBlob(callback, type, encoderOptions);
+```
+
+参数:
+
+- `callback`
+
+  回调函数，可获得一个单独的[`Blob`](https://developer.mozilla.org/zh-CN/docs/Web/API/Blob)对象参数。
+
+- `type` 可选
+
+  `DOMString`类型，指定图片格式，默认格式为`image/png`。
+
+- `encoderOptions` 可选
+
+  `Number` 类型，值在0与1之间，当请求图片格式为`image/jpeg`或者`image/webp`时用来指定图片展示质量。如果这个参数的值不在指定类型与范围之内，则使用默认值，其余参数将被忽略。
+
+返回值: 无。
+
+# FormData
+
+> `FormData` 接口提供了一种表示表单数据的键值对 `key/value` 的构造方式，并且可以轻松的将数据通过XMLHttpRequest.send()方法发送出去，本接口和此方法都相当简单直接。如果
+
+FormData对象管理表单数据
+
+```js
+ // 获取表单元素
+ var form = document.querySelector('#form');
+ // 监听表单元素的 submit 事件
+ form.addEventListener('submit', function(e) {
+    e.preventDefault();
+     // 根据 form 表单创建 FormData 对象，会自动将表单数据填充到 FormData 对象中
+     var fd = new FormData(form);
+     var xhr = new XMLHttpRequest();
+     xhr.open('POST', 'xxxx');
+     xhr.send(fd);
+     xhr.onreadystatechange = function() {
+         // ...
+     }
+})
+```
+
+## 方法
+
+- `FormData.append()`
+  向 `FormData` 中添加新的属性值，`FormData` 对应的属性值存在也不会覆盖原值，而是新增一个值，如果属性不存在则新增一项属性值。
+
+- `FormData.delete()`
+  从 FormData 对象里面删除一个键值对。
+
+- `FormData.entries()`
+  返回一个包含所有键值对的`iterator`对象。
+
+- `FormData.get()`
+  `返回在 FormData` 对象中与给定键关联的第一个值。
+
+- `FormData.getAll()`
+
+  返回一个包含 `FormData` 对象中与给定键关联的所有值的数组。
+
+- `FormData.has()`
+  `返回一个布尔值表明 FormData` 对象是否包含某些键。
+
+- `FormData.keys()`
+
+  返回一个包含所有键的`iterator`对象。
+
+- `FormData.set()`
+  给 `FormData` 设置属性值，如果`FormData` 对应的属性值存在则覆盖原值，否则新增一项属性值。
+
+- `FormData.values()`
+  返回一个包含所有值的`iterator`对象。
+
+**FormData说明**
+
+1. `FormData` 是浏览器的一个内置对象，可以直接使用
+
+2. 使用`new FormData(DOM)`的方式来创建这个对象
+   
+   1. 方法接受一个 `form`标签的 `DOM`对象，如果使用`jQuery`获取`DOM`需要从`jQuery`对象转换为`DOM`对象
+   
+3. 此对象会将数据转换成二进制数据
+
+4. 如果还有额外的数据，发送给服务器，需要使用`append(key,value)`来追加
+
+5. `FormData`的数据只能通过**POST**请求来发送，不要设置请示头，浏览器会自动添加
+
+   1. 如果使用 `jQuery` 发送 `ajax` 请求，一定要设置这两句
+
+   ```js
+   //通过请求发送的数据不转换为查询字符串
+   processData: false,
+   //不设置请求头，浏览器会自动为FormData设置请求头
+   contentType: false,
+   ```
+
+   
+
+# 获取 iframe 标签内外 DOM 文档对象
+
+1. 获取iframe里的内容
+
+```js
+//获取iframe的window对象
+iframe.contentWindow
+//获取iframe的document
+iframe.contentWindow.document
+//获取iframe的html
+iframe.contentWindow.document.documentElement
+//获取head
+iframe.contentWindow.document.head
+//获取body
+iframe.contentWindow.document.body
+```
+
+2. 在iframe中获取父级内容
+
+```js
+//获取上一级的window对象，如果还是iframe则是该iframe的window对象
+window.parent
+//获取最顶级容器的window对象，即，就是你打开页面的文档
+window.top 
+//返回自身window的引用。可以理解 window === window.self
+window.self 
+```
+
