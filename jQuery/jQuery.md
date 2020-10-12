@@ -1,4 +1,4 @@
-# **jQuery** 的介绍
+# jQuery 的介绍
 
 ### 引入 jQuery 的原因
 
