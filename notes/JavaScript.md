@@ -772,10 +772,11 @@ Array.isArray(arry);//返回布尔类型值
 
 ### Array.from()：将伪数组转换为真数组 ‼️
 
-```javascript
+```js
 //语法：array = Array.from(arrayLike);
-const name = 'qianguyihao';
-console.log(Array.from(name)); // 打印结果是数组：["q","i","a","n","g","u","y","i","h","a","o"]
+const name = 'playlife';
+console.log(Array.from(name)); 
+// 打印结果是数组：["p","l,"a","y","l","i","f","e"]
 ```
 
 **作用**：将**伪数组**或可遍历对象转换为**真数组**。
@@ -7297,9 +7298,7 @@ ES6 规定：使用 let/const 声明的变量，会使区块形成封闭的作�
 
 DTC 其实是一种保护机制，可以让我们养成良好的编程习惯。
 
-# ES6: 解构赋值‼️
-
-## 变量的解构赋值 
+# ES6: 变量的解构赋值‼️
 
 **解构赋值**：ES6 允许我们，按照一一对应的方式，从数组或者对象中**提取值**，再将提取出来的值赋值给变量。
 
