@@ -1,19 +1,27 @@
 # 项目目录
 
-> 10.9更新
+> 10.16更新
 
 ```txt
+.
 ├── Ajax
 │   └── Ajax.md
+├── NodeJS
+│   ├── NodeJS.md
+│   ├── README.md
+│   ├── code // Node 笔记中实现案例代码
+│   │   ├── RequireJS
+│   │   ├── SeaJS  
+│   │   ├── commonjs
+│   │   └── commonjs_browser
+│   └── media
 ├── README.md
 ├── jQuery
 │   └── jQuery.md
 └── notes
     ├── JavaScript.md
-    ├── archive (归档,旧文章,舍不得删)
-    │   ├── BOM 和 DOM.md
-    │   └── ES6 和补充.md
-    └── media(文章图片)     
+    ├── archive //归档,旧文章,舍不得删
+    └── media //文章图片
 ```
 
 
@@ -78,5 +86,29 @@ O’REILLY 系列的图书都非常经典,值的多看, 不断学习
     │   ├── BOM 和 DOM.md
     │   └── ES6 和补充.md
     └── media(文章图片)    
+```
+
+2020.10.16 更新项目目录
+
+```txt
+.
+├── Ajax
+│   └── Ajax.md
+├── NodeJS
+│   ├── NodeJS.md
+│   ├── README.md
+│   ├── code // Node 笔记中实现案例代码
+│   │   ├── RequireJS
+│   │   ├── SeaJS  
+│   │   ├── commonjs
+│   │   └── commonjs_browser
+│   └── media
+├── README.md
+├── jQuery
+│   └── jQuery.md
+└── notes
+    ├── JavaScript.md
+    ├── archive //归档,旧文章,舍不得删
+    └── media //文章图片
 ```
 

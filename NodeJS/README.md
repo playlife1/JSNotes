@@ -4,13 +4,13 @@
 
 ```text
 .
-├── NodeJS.md //笔记本土
+├── NodeJS.md // 笔记本体
 ├── README.md 
-├── code //笔记中实现案例代码
-│   ├── RequireJS //AMD 实现
-│   ├── SeaJS //CMD实现
-│   ├── commonjs //CommonJS在服务器端实现
-│   └── commonjs_browser//CommonJS在浏览器端实现
-└── media //笔记中所用图片资源所在文件夹
+├── code // 笔记中实现案例代码
+│   ├── RequireJS // AMD 实现
+│   ├── SeaJS // CMD 实现
+│   ├── commonjs // CommonJS 在服务器端实现
+│   └── commonjs_browser// CommonJS 在浏览器端实现
+└── media // 笔记中所用图片资源所在文件夹
 ```
 
