@@ -1,6 +1,6 @@
 #  Node.js 
 
-<img src="./media/Node_logo.png" alt="Node.js_logo"  />
+<img src="./media/Node_logo.png" alt="Node.js_logo" style="zoom:50%;" />
 
 > 在学习 Node.js 之前一定要对与 JavaScript ES6 语法有一定的了解和认知
 
@@ -642,6 +642,36 @@ const module3 = require('Demo/src/main.js');
 
 - 无论是什么模块，我们都要使用 `require()` 去加载，然后才能使用。
 - 加载自定义的模块，需要加 `./` ，而且可以省略后缀 `.js`
+
+## require() 基本用法
+
+当 Node 遇到 require(X) 时，按下面的顺序处理。
+
+（1）如果 X 是内置模块（比如 require('http'）)
+　　a. 返回该模块。
+　　b. 不再继续执行。
+
+（2）如果 X 以 "./" 或者 "/" 或者 "../" 开头
+　　a. 根据 X 所在的父模块，确定 X 的绝对路径。
+　　b. 将 X 当成文件，依次查找下面文件，只要其中有一个存在，就返回该文件，不再继续执行。
+
+> - X
+> - X.js
+> - X.json
+> - X.node
+
+　　c. 将 X 当成目录，依次查找下面文件，只要其中有一个存在，就返回该文件，不再继续执行。
+
+> - X/package.json（main字段）
+> - X/index.js
+> - X/index.json
+> - X/index.node
+
+（3）如果 X 不带路径
+　　a. 根据 X 所在的父模块，确定 X 可能的安装目录。
+　　b. 依次在每个目录中，将 X 当成文件名或目录名加载。
+
+（4） 抛出 "not found"
 
 ## 主模块
 
@@ -3734,8 +3764,6 @@ define(function (require) {
 
   - CMD 是延迟执行。
 
-
-
 - CMD 推崇依赖就近 
 
   > 什么时候用，什么时候加载
@@ -3775,6 +3803,18 @@ RequireJS 和 Sea.js 都是模块加载器，倡导模块化开发理念，核�
 总之，如果说 RequireJS 是 Prototype 类库的话，则 Sea.js 致力于成为 jQuery 类库。
 
 
+
+# CommonJS 与 ES6 模块
+
+- CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
+
+- CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。
+
+- CommonJs 是单个值导出，ES6 Module可以导出多个
+
+- CommonJs 是动态语法可以写在判断里，ES6 Module 静态语法只能写在顶层
+
+- CommonJs 的 this 是当前模块，ES6 Module的 this 是 undefined
 
 # ES6 Module
 
@@ -4696,6 +4736,14 @@ Cookie是一段不超过 ==4KB== 的小型文本数据，由一个名称（Name�
 
 > Node.js 中 Express 框架可以使用 cookie-parser 中间件。
 
+```js
+const express = require('express');
+const cookieParser = require('cookie-parser');
+app.use(cookieParser())
+```
+
+
+
 ### 有效期
 
 默认：浏览 session （会话）结束（也就是关闭浏览器）
@@ -4734,6 +4782,18 @@ Session：在计算机中，尤其是在网络应用中，称为“会话控制�
 Session 对象最常见的一个用法就是存储用户的首选项。例如，如果用户指明不喜欢查看图形，就可以将该信息存储在 Session 对象中。
 
 > Node.js 中使用 Express 和 Express-session
+
+```js
+app.use(session({
+    //传递session的加密秘钥，一般情况下随便填一个字符串。
+    secret: 'asdf23sfsd23',
+    // 下面两项，设置成true或者false，都可以。使用内存存储session的时候，下面两项没作用
+    saveUninitialized: false,
+    resave: false
+}));
+```
+
+
 
 ### 有效期
 
@@ -4820,6 +4880,323 @@ JWT 的原理是，服务器认证以后，生成一个 JSON 对象，发回给�
 
 （6）为了减少盗用，JWT 不应该使用 HTTP 协议明码传输，要使用 HTTPS 协议传输。
 
+### Token 的作用
 
+1. 防止表单重复提交
+2. 进行登录认证
+3. 进行权限验证、防止“翻墙操作”
+4. 预防跨站点请求伪造 CSRF
 
 # Node.js 实战开发案例
+
+> 大事件服务器端开发
+
+### 如何获取客户端携带的请求参数
+
+| 请求方式 | 参数类型   | 服务端如何获取    | 谁控制的                                         |
+| -------- | ---------- | ----------------- | ------------------------------------------------ |
+| POST     | 查询字符串 | req.body          | `app.use(express.urlencoded({extended: false}))` |
+| POST     | FormData   | req.body/req.file | `multer` 中间件                                  |
+| GET      | 查询字符串 | req.query         | express 封装的属性                               |
+| GET      | 动态参数   | req.params        | express 封装的属性                               |
+| GET/POST | token      | req.user          | express-jwt 中间件控制的                         |
+
+> 服务端获取到的数据都是对象类型
+
+使用的 Node 第三方包：
+
+## express 用于搭建服务器
+
+> 快速搭建起一个监听端口3007的本地服务器
+
+```js
+// Node 内置模块路径模块
+const path = require('path');
+// 第三方模块用于快速搭建服务器，Express 保留了 http 模块的基本API，使用 Express 的时候，也能使用 http 的 API。
+const express = require('express');
+const app = express();
+app.listen(3007, () => console.log('Server Start'));
+```
+
+> 配置 express 应用级中间件
+
+```js
+const cors = require('cors');
+// 加载路由模块之前，设置应用级别的中间件
+// 接收 urlencoded 类型的请求体 -> 编码过后的查询字符串
+app.use(express.urlencoded({ extended: false }));
+// 开放静态资源（uploads）uploads 文件夹要放上传的图片
+app.use(express.static('uploads'));
+
+//---------------------------------------------------
+// 错误中间件，统一处理tokne的问题
+app.use((err, req, res, next) => {
+    // 真的token问题，做判断
+    if (err.name === 'UnauthorizedError') {
+        console.log(err.message);
+        res.json({
+            status: 1,
+            message: '身份认证失败！',
+        });
+    }
+});
+//-------------第三方包------------------------
+// 解决跨域
+app.use(cors());
+```
+
+> 配置路由基本中间件
+
+```js
+// 加载路由模块，并注册成中间件
+app.use('/api', require(path.join(__dirname, 'routers', 'login')));
+app.use('/api', require(path.join(__dirname, 'routers', 'register')));
+app.use('/my/article', require(path.join(__dirname, 'routers', 'category')));
+app.use('/my/article', require(path.join(__dirname, 'routers', 'article')));
+app.use('/my', require(path.join(__dirname, 'routers', 'user')));
+```
+
+> 路由模块实现
+
+```js
+/**
+ * 1. 加载express
+ * 2. 创建路由对象
+ * 3. 把路由挂载到路由对象上
+ * 4. 导出路由对象
+ */
+const express = require('express');
+const router = express.Router();
+//使用到了个人封装的自定义包
+const db = require('../utils/db');
+
+//修改（更新）用户信息
+router.post('/usrinfo', async (req, res) => {
+    let obj = {
+        nickname: req.body.nickname,
+        email: req.body.email,
+    };
+    let result = await db('UPDATE user SET ? WHERE id = ?', [obj, req.body.id]);
+    result.affectedRows > 0
+        ? res.json({
+              status: 0,
+              message: '修改用户信息成功',
+          })
+        : res.json({
+              status: 1,
+              message: '修改用户信息失败',
+          });
+});
+//导出路由
+module.exports = router;
+```
+
+## mysql 用于操作数据库
+
+mysql 查询语句中占位符与参数对应关系
+
+1. SQL中有 1 个占位符，则 `query(sql,params)` 方法的第二个参数设置为一个值
+
+2. SQL中有 多 个占位符，则` query(sql,params)`方法的第二个参数设置为数组，数组中的值按顺序分别传递给每个占位符
+
+3. SQL中，如果 `字段 = 值,字段 = 值...`使用 `?` 站位了，则，则` query(sql,params)`方法的第二个参数设置为对象，并且对象的属性名与数据库表字段名一一对应
+
+```js
+//将 mysql 相关操作封装成个人包
+/**
+ * 导出函数，作用是完成mysql操作（增删改查）
+ * @param sql SQL语句
+ * @param params 为SQL语句中的占位符传递的值，默认是null
+ * @returns Promise对象
+ */
+module.exports = (sql, params = null) => {
+  	//第一个加载包会有缓存，以后每次加载都直接读取缓存
+    const mysql = require('mysql');
+  	//创建 mysql 连接，参数为配置连接信息
+    const conn = mysql.createConnection({
+    	//数据库所在主机位置，本地的当然是 localhost 了
+        host: 'localhost',
+    	// 端口号   
+      	port:'3306',
+      //用户名
+        user: 'root',
+      //密码
+        password: '1160343823',
+      //默认操作的数据库
+        database: 'big-event',
+    });
+  //使用异步的 Promise 来执行数据相关操作
+    return new Promise((resolve, reject) => {
+        conn.connect();
+     //占位符 
+        conn.query(sql, params, (err, res) => {
+            err ? reject(err) : resolve(res);
+        });
+        conn.end();
+    }).catch((err) => {
+        console.log(err);
+    });
+};
+
+```
+
+
+
+## cors 用于解决跨域
+
+> CORS 是用于解决 cros 跨域问题的 Express 中间件
+
+使用：
+
+```js
+var express = require('express')
+var cors = require('cors')
+var app = express()
+ 
+app.use(cors())
+ 
+app.get('/products/:id', function (req, res, next) {
+  res.json({msg: 'This is CORS-enabled for all origins!'})
+})
+ 
+app.listen(80, function () {
+  console.log('CORS-enabled web server listening on port 80')
+})
+```
+
+
+
+## multer 用于完成文件上传
+
+Multer 是一个 node.js 中间件，用于处理 `multipart/form-data` 类型的表单数据，它主要用于上传文件。它是写在 busboy 之上非常高效。
+
+**注意**: Multer 不会处理任何非 `multipart/form-data` 类型的表单数据。
+
+基本使用方法:
+
+```js
+const express = require('express')
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+
+const app = express()
+
+app.post('/profile', upload.single('avatar'), function (req, res, next) {
+  // req.file 是 `avatar` 文件的信息
+  // req.body 将具有文本域数据，如果存在的话
+})
+
+app.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {
+  // req.files 是 `photos` 文件数组的信息
+  // req.body 将具有文本域数据，如果存在的话
+})
+
+var cpUpload = upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }])
+app.post('/cool-profile', cpUpload, function (req, res, next) {
+  // req.files 是一个对象 (String -> Array) 键是文件名，值是文件数组
+  //
+  // 例如：
+  //  req.files['avatar'][0] -> File
+  //  req.files['gallery'] -> Array
+  //
+  // req.body 将具有文本域数据，如果存在的话
+})
+
+//如果你需要处理一个只有文本域的表单，你应当使用 .none():
+app.post('/profile', upload.none(), function (req, res, next) {
+  // req.body 包含文本域
+})
+```
+
+`.single(fieldname)`
+
+ 接受一个以 `fieldname` 命名的文件。这个文件的信息保存在 `req.file`。
+
+`.array(fieldname[, maxCount])`
+
+接受一个以 `fieldname` 命名的文件数组。可以配置 `maxCount` 来限制上传的最大数量。这些文件的信息保存在 `req.files`。
+
+`.fields(fields)`
+
+接受指定 `fields` 的混合文件。这些文件的信息保存在 `req.files`。
+
+`fields` 应该是一个对象数组，应该具有 `name` 和可选的 `maxCount` 属性。
+
+Example:
+
+```js
+[
+  { name: 'avatar', maxCount: 1 },
+  { name: 'gallery', maxCount: 8 }
+]
+```
+
+`.none()`
+
+只接受文本域。如果任何文件上传到这个模式，将发生 "LIMIT_UNEXPECTED_FILE" 错误。这和 `upload.fields([])` 的效果一样。
+
+`.any()`
+
+接受一切上传的文件。文件数组将保存在 `req.files`。
+
+**警告:** 确保你总是处理了用户的文件上传。 永远不要将 multer 作为全局中间件使用，因为恶意用户可以上传文件到一个你没有预料到的路由，应该只在你需要处理上传文件的路由上使用。
+
+## express-jwt  用于`解密`token字符串
+
+使用 `express-jwt` 实现解密 `token`， 通过 `req.user` 可获取到 `token` 数据。并且可以配置排除接口的规则
+
+```js
+/* 
+express-jwt步骤：
+  1 引入 const expressJWT = require('express-jwt')
+  2 配置 app.use( expressJWT({secret: 'bigevent-9760', algorithms: ['HS256']}).unless({path: /^\/api/}))
+*/
+// 
+const expressJWT = require('express-jwt')
+/* 
+secret: 秘钥 和 加密的时候 要统一。
+algorithms： 配置加密的方法 ，默认['HS256']即可
+unless： 排除
+  字符串： '/api'  排除以/api开头的 接口
+  数组： ['/api', '/user'] 排除数组项中配置的接口
+  正则： /^\/api/  配置符合正则表达式规则的接口 不需要验证
+*/
+app.use(
+  expressJWT({
+    secret: '密钥', 
+    //加密算法 HS256
+    algorithms: ['HS256']
+  }).unless({path: /^\/api/})
+)
+```
+
+## jsonwebtoken 用于加密 token 字符串
+
+在需要权限的请求 API 每次请求要在请求头带上 Authorization ，值是token。
+
+```js
+const expressJWT = require('express-jwt');
+/* 
+*token ：需要以'Bearer '开头 后面是 jwt.sign
+*jwt.sign 参数：
+*参数1 要保存的数据
+*参数2 加密的秘钥
+*参数3 配置项 expiresIn（失效时间）: 字符串为毫秒数  数值为 秒数 
+*/
+      token: 'Bearer ' + jwt.sign({username:req.body.username , id: r[0].id}, '密钥', {expiresIn: 72000})
+
+//使用 req.user.username 可以去除参数1保存的数据
+```
+
+## moment 处理添加时间
+
+> npm install moment
+>
+> Moment.js 是一个 JavaScript 日期处理类库，用于解析、检验、操作、以及显示日期
+
+```js
+var moment = require('moment');
+moment().format();
+obj.pub_date = moment().format('YYYY-MM-DD hh:mm:ss');
+```
+
