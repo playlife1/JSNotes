@@ -3144,9 +3144,10 @@ anthorp.name; //anthorp
 talk is cheap， show me code。
 
 ```js
-//创建一个用于封装继承过程的函数，传入obj
+//创建一个用于封装继承过程的函数，传入 obj
 function create(obj){
-    //通过调用object方法以obj为基础创建一个新对象。此处object表示任何能够返回新对象的函数
+    //通过调用 object 方法以 obj 为基础创建一个新对象。此处 object 表示任何能够返回新对象的函数
+  	//Object.create()
     var clone = object(obj);
     //以为对象新增方法的方式增强对象
     clone.sayHi = function(){
@@ -3155,7 +3156,6 @@ function create(obj){
     //返回对象
     return clone;
 }
-
 //使用create函数
 //一个基础对象person
 var person = {

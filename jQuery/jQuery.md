@@ -1334,6 +1334,20 @@ $.post(URL,data,success);
 - 第二个参数存有请求的状态
 - 第三个参数包含XMLHttpRequest 对象
 
+## jQuery - AJAX ajaxPrefilter() 方法
+
+> 在每个请求之前被发送和`$.ajax()`处理它们前处理，设置自定义Ajax选项或修改现有选项。
+
+```js
+jQuery.ajaxPrefilter( [dataTypes ], handler(options, originalOptions, jqXHR) )
+```
+
+- `options` 是请求的选项
+- `originalOptions` 值作为提供给Ajax方法未经修改的选项，因此，没有`ajaxSettings`设置中的默认值
+- `jqXHR` 是请求的jqXHR对象
+
+
+
 # jQuery deferred 延迟对象
 
 ## deferred.done() 方法

@@ -819,6 +819,18 @@ $('form').on('submit',function(e){
 });
 ```
 
+## jQuery.ajaxPrefilter()
+
+> 在每个请求之前被发送和`$.ajax()`处理它们前处理，设置自定义Ajax选项或修改现有选项。
+
+```js
+jQuery.ajaxPrefilter( [dataTypes ], handler(options, originalOptions, jqXHR) )
+```
+
+- `options` 是请求的选项
+- `originalOptions` 值作为提供给Ajax方法未经修改的选项，因此，没有`ajaxSettings`设置中的默认值
+- `jqXHR` 是请求的jqXHR对象
+
 
 
 # 模版引擎
