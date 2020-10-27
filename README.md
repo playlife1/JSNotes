@@ -1,114 +1,39 @@
 # 项目目录
 
-> 10.16更新
-
 ```txt
 .
 ├── Ajax
-│   └── Ajax.md
+├── DataStructure //数据结构与算法
+├── HTML&CSS
+├── JavaScript
 ├── NodeJS
-│   ├── NodeJS.md
-│   ├── README.md
-│   ├── code // Node 笔记中实现案例代码
-│   │   ├── RequireJS
-│   │   ├── SeaJS  
-│   │   ├── commonjs
-│   │   └── commonjs_browser
-│   └── media
+├── Q&A //经典问题，详细回答。巩固自己
 ├── README.md
-├── jQuery
-│   └── jQuery.md
-└── notes
-    ├── JavaScript.md
-    ├── archive //归档,旧文章,舍不得删
-    └── media //文章图片
+├── Vue
+├── Webpack
+└── jQuery
 ```
-
-
 
 # 概述
 
-这个 repository 是我在学习 JavaScript 时所整理的笔记, 配合 Typora 大纲视图快速定位到知识点, 稳固而知新.
+> Stay foolish. Stay hungry.  —— Steve Jobs
+>
+> 虚怀若愚，求知若饥。
 
-同时随着自己的对于  JavaScript 学习和理解的不断加深, 其中的内容也在不断的更新.
+> 没有经过整理的知识才是徒然浪费时间，伤透脑筋！—— 司徒正美
 
+## playlife 前端学习笔记库
 
+> 前端入门，目标全干 😂
 
-PS: 前些日子在 浏览 github 时,无意中翻到了司徒正美前辈的主页,
+封面：
 
-受前辈一句话鼓舞:
-
-> 没有经过整理的知识才是徒然浪费时间，伤透脑筋！🙏愿前辈安息 R.I.P.
-
-特意将自己的笔记整理出来, 分享到 github, 一是备份、二是分享.
-
-本人水平有限, 随着不断的学习, 笔记还会不断的更新!
-
-![notes_cover](./notes/media/notes_cover.png)
-
-上面这张图, 是我用 O’REILLY 系列图书封面生成器所生成的笔记封面
-
-> (并不知道这是什么鸟)
-
-O’REILLY 系列的图书都非常经典,值的多看, 不断学习
-
-2020.10.2 新上传了 jQuery Ajax 和一些单独拿出来的 JS部分笔记 
-大家中秋🎑&&国庆🎉 双节快乐! (迟到的祝福㊗️) 😊
+![notes_cover](./JavaScript/media/notes_cover.png)
 
 
 
-2020.10.7 更新项目目录
+声明：本仓库为个人学习时所记录笔记📒，并非全都是原创。
 
-```txt
-├── Ajax 
-│   └── Ajax.md
-├── README.md
-├── jQuery
-│   └── jQuery.md
-└── notes
-    ├── BOM 和 DOM.md
-    ├── ES6 和补充.md
-    ├── JavaScript.md
-    └── media (图片文件)
-```
+站在巨人的肩膀上，感谢前人对于知识的无私分享，本笔记所记载内容非原创出处均有标记。
 
-2020.10.9 更新项目目录
-
-```txt
-├── Ajax
-│   └── Ajax.md
-├── README.md
-├── jQuery
-│   └── jQuery.md
-└── notes
-    ├── JavaScript.md
-    ├── archive (归档,旧文章,舍不得删)
-    │   ├── BOM 和 DOM.md
-    │   └── ES6 和补充.md
-    └── media(文章图片)    
-```
-
-2020.10.16 更新项目目录
-
-```txt
-.
-├── Ajax
-│   └── Ajax.md
-├── NodeJS
-│   ├── NodeJS.md
-│   ├── README.md
-│   ├── code // Node 笔记中实现案例代码
-│   │   ├── RequireJS
-│   │   ├── SeaJS  
-│   │   ├── commonjs
-│   │   └── commonjs_browser
-│   └── media
-├── README.md
-├── jQuery
-│   └── jQuery.md
-└── notes
-    ├── JavaScript.md
-    ├── archive //归档,旧文章,舍不得删
-    └── media //文章图片
-```
-
+如有疏漏还请提 issue，联系本人修改。
