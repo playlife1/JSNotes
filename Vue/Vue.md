@@ -2811,3 +2811,112 @@ export default {
 
 
 # Vue 生命周期
+
+> 每个 Vue 实例在被创建时都要经过一系列的初始化过程——例如，需要设置数据监听、编译模板、将实例挂载到 DOM 并在数据变化时更新 DOM 等。同时在这个过程中也会运行一些叫做**生命周期钩子**的函数，这给了用户在不同阶段添加自己的代码的机会。
+
+![life-cycle-comment](./media/life-cycle-comment.png)
+
+
+
+生命周期函数（钩子函数）：
+
+beforeCreate & created
+
+beforeMount & mounted
+
+beforeUpdate & updated
+
+beforeDestroy & destroyed
+
+## 生命周期
+
+### new Vue()
+
+> new 了一个Vue的实例对象，此时就会进入组件的创建过程。
+
+### Init Events & Lifecycle
+
+> 初始化组件的事件和生命周期函数，当执行这一步之后，组件的生命周期函数就已经全部初始化好了，等待着依次被调用；
+
+### beforeCreate 钩子函数
+
+> 组件创建之后遇到的第一个生命周期函数，这个阶段data 和methods以及dom结构都未被初始化，也就是获取不到data的值，不能调用methods中的函数
+
+### Init injections & reactivity
+
+> 这个阶段中，正在初始化data和methods中的方法
+
+### created 钩子函数
+
+> 这个阶段组件的 data 和 methods 中的方法已初始化结束，可以访问，但是 Dom结构未初始化，页面未渲染在这个阶段，经常会发起ajax请求
+
+### 编译模板结构
+
+> 判断是否有 el 属性，若有 el 属性判断是否有 template 属性，若有template属性，则渲染template的模板，若没有template属性，则渲染el属性的模板；也就是el不指定，不渲染数据。
+>
+> 判断是否有el属性，若没有，则等待执行vm.$mount(‘el模板’) 这行代码
+> 当以上步骤（编译模板）执行后，我们的模板页面，还没有挂载到页面上，只是存在与内存中
+
+![complie-template](./media/complie-template.png)
+
+```js
+new Vue({
+  el: '#app',
+  router,
+  template: '<App/>',
+  components: { App }
+})
+```
+
+### beforeMount 钩子函数
+
+> 当模板在内存中编译完成，此时内存中的模板结构还未渲染至页面上，看不到真实的数据。此时用看到的只是模板页面
+
+### Create vm.$el and replace ‘el’ with it
+
+> 这一步，正在把内存中渲染好的模板结构替换至真实的dom结构也就是页面上
+
+### mounted 钩子函数
+
+> 此时，页面渲染好，用户看到的是真实的页面数据， 生命周期创建阶段完毕，进入到了运行中的阶段，若此时用到了第三方的 ui 插件，需要初始化插件时放在此生命周期函数中。
+
+### 生命周期运行中 {
+
+> 当数据被修改后，beforeUpdate、updated就会执行，数据被修改几次，beforeUpdate、updated就就执行几次
+
+![lifemoment](./media/lifemoment.png)
+
+### beforeUpdate 钩子函数
+
+> 当执行此函数，数据时新的，但是页面是旧的
+
+### Virtual DOM re-render and patch
+
+> 正在根据最近的data数据，重新渲染内存中的模板结构，并把渲染好的模板结构，替换至页面上
+
+### updated 钩子函数 
+
+页面已经完成了更新，此时，data数据和页面的数据都是新的
+
+### }
+
+### beforeDestroy 钩子函数
+
+> 当执行此函数时，组件即将被销毁，但是还没有真正开始销毁，此时组件的data、methods数据或方法 还可被调用
+
+### Teardown watchers,childcomponents and listeners
+
+> 注销组件及侦听器，子组件以及时间监听器
+
+### destroyed 钩子函数
+
+> 组件已经完成了销毁
+
+
+
+## 生命周期函数（钩子函数）
+
+> 以下内容来自于 [Vue.js 技术揭秘](https://ustbhuangyi.github.io/vue-analysis/) 视频课程的辅助教材，**请务必支持正版，请尊重作者的劳动成果**。
+
+> [Vue.js源码全方位深入解析](https://coding.imooc.com/class/228.html) 作者：ustbhuangyi
+
