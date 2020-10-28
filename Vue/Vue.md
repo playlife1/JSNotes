@@ -2243,7 +2243,7 @@ Vue.component('MyComponentName', { /* ... */ })
 - 子 => 父：在父组件中使用子组件的数据，可通过自定义事件实现
 - 兄弟组件之间
 
-<img src="./media/vue-correspond.png" alt="vue-correspond" style="zoom:50%;" />
+<code><img src="./media/vue-correspond.png" alt="vue-correspond" style="zoom:50%;"/></code>
 
 ## 一、`props` / `$emit`
 

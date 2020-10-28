@@ -1,6 +1,7 @@
 #  Node.js 
 
-<img src="./media/Node_logo.png" alt="Node.js_logo" style="zoom:50%;" />
+<code><img src="./media/Node_logo.png" alt="Node.js_logo" style="zoom:50%;" /></code>
+
 
 > 在学习 Node.js 之前一定要对与 JavaScript ES6 语法有一定的了解和认知
 
@@ -180,7 +181,7 @@ node
 
 REPL 的全称：Read、Eval、 Print、Loop。类似于浏览器的控制台。
 
-<img src="./media/REPL.jpg" alt="REPL" style="zoom: 50%;" />
+<code><img src="./media/REPL.jpg" alt="REPL" style="zoom: 50%;" /></code>
 
 如果要退出 REPL 环境，可以输入`.exit` 或 `process.exit()`。
 
@@ -425,7 +426,7 @@ CMD 规范：是 SeaJS 在推广过程中对模块化定义的规范化产出。
 
 # Node.js 加载模块流程
 
-<img src="./media/module_load.jpg" alt="module_load" style="zoom:60%;" />
+<code><img src="./media/module_load.jpg" alt="module_load" style="zoom:60%;" /></code>
 
 
 
@@ -1001,7 +1002,7 @@ browserify js/src/app.js -o js/dist/bundle.js
 
 控制台内容：
 
-![result_2](/Users/johnny/Downloads/md/knowledge/media/result_2.png)
+<code>![result_2](/Users/johnny/Downloads/md/knowledge/media/result_2.png)</code>
 
 浏览器可以识别，执行。
 
@@ -3742,9 +3743,7 @@ define(function (require) {
 
 ```
 
-![SeaJS](./media/SeaJS.jpg)
-
-
+<code>![SeaJS](./media/SeaJS.jpg)</code>
 
 
 
@@ -3781,8 +3780,8 @@ define(function (require) {
 - CMD 的 API 严格区分，推崇职责单一。
 
   > CMD 里，没有全局 require，而是根据模块系统的完备性，提供 seajs.use 来实现模块系统的加载启动。
-
-
+  
+  
 
 来自 SeaJS 作者玉伯原话：
 
@@ -3801,8 +3800,6 @@ RequireJS 和 Sea.js 都是模块加载器，倡导模块化开发理念，核�
 5. **插件机制不同**。RequireJS 采取的是在源码中预留接口的形式，插件类型比较单一。Sea.js 采取的是通用事件机制，插件类型更丰富。
 
 总之，如果说 RequireJS 是 Prototype 类库的话，则 Sea.js 致力于成为 jQuery 类库。
-
-
 
 # CommonJS 与 ES6 模块
 
@@ -3981,7 +3978,7 @@ setTimeout(() => foo = 'baz', 500);
 
 最后，`export`命令可以出现在模块的任何位置，只要处于模块顶层就可以。
 
-如果处于块级作用域内，就会报错，``import`命令也是如此。
+如果处于块级作用域内，就会报错，`import`命令也是如此。
 
 因为处于条件代码块之中，就没法做静态优化了，违背了 ES6 模块的设计初衷。
 
