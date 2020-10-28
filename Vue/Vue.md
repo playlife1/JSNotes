@@ -2804,9 +2804,7 @@ export default {
 - 兄弟组件通信: eventBus ; Vuex
 - 跨级通信: eventBus; Vuex; `provide` / `inject` 、`$attrs` / `$listeners`
 
-# Vuex
 
-####
 
 
 
@@ -2848,7 +2846,7 @@ beforeDestroy & destroyed
 
 ### created 钩子函数
 
-> 这个阶段组件的 data 和 methods 中的方法已初始化结束，可以访问，但是 Dom结构未初始化，页面未渲染在这个阶段，经常会发起ajax请求
+> 这个阶段组件的 data 和 methods 中的方法已初始化结束，可以访问，但是 Dom结构未初始化，页面未渲染在这个阶段，经常会发起 ajax 请求
 
 ### 编译模板结构
 
@@ -2874,7 +2872,7 @@ new Vue({
 
 ### Create vm.$el and replace ‘el’ with it
 
-> 这一步，正在把内存中渲染好的模板结构替换至真实的dom结构也就是页面上
+> 这一步，正在把内存中渲染好的模板结构替换至真实的 dom 结构也就是页面上
 
 ### mounted 钩子函数
 
@@ -2919,4 +2917,179 @@ new Vue({
 > 以下内容来自于 [Vue.js 技术揭秘](https://ustbhuangyi.github.io/vue-analysis/) 视频课程的辅助教材，**请务必支持正版，请尊重作者的劳动成果**。
 
 > [Vue.js源码全方位深入解析](https://coding.imooc.com/class/228.html) 作者：ustbhuangyi
+
+
+
+
+
+
+
+
+
+# Vuex
+
+####
+
+
+
+# Vue Router
+
+**前端路由基础：**
+
+> **传统多页应用** - 每个页面对应的URL，都会去服务端请求获取
+>
+> **单页应用（SPA**）- 只在第一次请求一个页面时去服务端请求获取必要的资源，后续的所有操作和页面切换，都由这张页面来完成。这一切都是有JS来进行控制的。
+
+**单页应用优缺点**
+
+优点：
+
+- 用户操作：体验流畅
+- 代码编写：完全的前端组件化开发
+
+缺点：
+
+- 首次加载大量资源（当然，也可以通过很多优化方式来降低这一缺点，以后了解）
+- 对搜索引擎优化（SEO）不友好，搜索引擎无法很好的抓取单页应用的页面数据
+  - 开发难度相对较高
+
+单页应用的实现原理：
+
+1. 前后端分离的开发模式：
+   - 后端 - 专注于数据处理
+   - 前端 - 专注于展现和交互
+2. 采用前端路由机制：
+
+   - 由前端来生成页面路径、及切换对应视图
+
+   - 有两种前端路由实现方式，各有利弊
+
+**Hash路由**
+
+利用 URL 上的 hash（#井号开头的字符串）来做单页应用的页面路径标识
+
+- 首先，因为 hash 的改变不会引起页面的刷新
+
+- 其次，当 hash 变化时可触发 hashchange 事件，可通过该事件的回调去控制视图内容变化
+
+```html
+<a href="#/">首页</a> |
+<a href="#/users">用户管理</a> |
+<a href="#/rights">权限管理</a>
+
+<hr>
+
+<div id="content"></div>
+
+<script>
+    var content = document.getElementById('content');
+    function changePageContent(path) {
+        // 判断路径，设置相应的页面内容
+        switch (path) {
+            case '/':
+                content.innerHTML = '这是首页';
+                break;
+            case '/users':
+                content.innerHTML = '这是用户管理';
+                break;
+            case '/rights':
+                content.innerHTML = '这是权限管理';
+                break;
+        }
+    }
+
+    window.onhashchange = function () {
+        // 获取到带#的字符串
+        var hash = location.hash;
+        // 去掉#号，得到路径
+        var path = hash.replace('#', '');
+        // 切换页面内容
+        changePageContent(path);
+    };
+    changePageContent('/');
+</script>
+```
+
+**History路由：**
+
+> History路由基于HTML5规范，在HTML5规范中提供了一些如：`history.pushState()`，`history.replaceState()` 来进行前端路由控制
+
+**`history.pushState()`** 方法向当前浏览器会话的历史堆栈中添加一个状态（state）。
+
+```js
+history.pushState(state, title[, url])
+```
+
+参数：
+
+- state
+
+  > 状态对象是一个JavaScript对象，它与`pushState()`创建的新历史记录条目相关联。 每当用户导航到新状态时，都会触发`popstate`事件，并且该事件的状态属性包含历史记录条目的状态对象的副本。
+
+- title
+
+  > [当前大多数浏览器都忽略此参数](https://github.com/whatwg/html/issues/2174)，尽管将来可能会使用它。 在此处传递空字符串应该可以防止将来对方法的更改。 或者，您可以为要移动的州传递简短的标题。
+
+- `url` 可选
+
+  > 新历史记录条目的URL由此参数指定。 请注意，浏览器不会在调用`pushState() `之后尝试加载此URL，但可能会稍后尝试加载URL，例如在用户重新启动浏览器之后。 新的URL不必是绝对的。 如果是相对的，则相对于当前URL进行解析。 新网址必须与当前网址相同 [origin](https://developer.mozilla.org/zh-CN/docs/Glossary/源)； 否则，`pushState()`将引发异常。 如果未指定此参数，则将其设置为文档的当前URL。
+
+**`history.replaceState()`** 方法使用`state objects`, `title`,和 `URL` 作为参数， 修改当前历史记录实体，如果你想更新当前的state对象或者当前历史实体的URL来响应用户的的动作的话这个方法将会非常有用。
+
+```js
+history.replaceState(stateObj, title[, url]);
+```
+
+参数：
+
+- stateObj
+
+状态对象是一个JavaScript对象，它与传递给 `replaceState` 方法的历史记录实体相关联.
+
+- title
+
+> [大部分浏览器忽略这个参数](https://github.com/whatwg/html/issues/2174), 将来可能有用. 在此处传递空字符串应该可以防止将来对方法的更改。或者，您可以为该状态传递简短标题
+
+- `url` 可选
+
+> 历史记录实体的URL. 新的URL跟当前的URL必须是同源; 否则 replaceState 抛出一个异常.
+
+
+
+例子：
+
+```html
+<a href="javascript:void(0)" onclick="changePageContent({}, 'home', '/')">首页</a> |
+<a href="javascript:void(0)" onclick="changePageContent({}, 'users', '/users')">用户管理</a> |
+<a href="javascript:void(0)" onclick="changePageContent({}, 'rights', '/rights')">权限管理</a>
+<hr>
+<div id="content"></div>
+<script>
+    var content = document.getElementById('content');
+    function changePageContent(data, name, path) {
+        switch (path) {
+            case '/':
+                history.pushState(data, name, path)
+                content.innerHTML = '这是首页';
+                break;
+            case '/users':
+                history.pushState(data, name, path)
+                content.innerHTML = '这是用户管理';
+                break;
+            case '/rights':
+                history.pushState(data, name, path)
+                content.innerHTML = '这是权限管理';
+                break;
+        }
+    }
+
+    changePageContent({}, 'home', '/');
+</script>
+```
+
+## 前端路由管理 Vue Router
+
+[Vue Router](https://router.vuejs.org/zh/) 是 Vue 官方提供的前端路由管理器。它和 Vue 框架核心深度集成，使得构建单页应用变得易如反掌。
+
+>  主要功能：根据不同的请求地址，渲染显示不同的Vue组件
 
