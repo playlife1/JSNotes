@@ -1002,7 +1002,7 @@ browserify js/src/app.js -o js/dist/bundle.js
 
 控制台内容：
 
-<code>![result_2](/Users/johnny/Downloads/md/knowledge/media/result_2.png)</code>
+<code>![result_2](./media/result_2.png)</code>
 
 浏览器可以识别，执行。
 
