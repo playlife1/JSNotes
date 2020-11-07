@@ -3265,7 +3265,7 @@ Node.js 执行之后会初始化一个事件循环，执行代码程序（这些
 
 **事件循环的执行循序:**
 
-<img src="./media/node_eventloop.jpg" alt="node_eventloop" style="zoom:50%;" />
+<img src="./media/node_eventloop.jpg" alt="node_eventloop" style="zoom:50%;" /> 
 
 **注意**：每个方框将被称为事件循环的 “阶段”。
 

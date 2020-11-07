@@ -18,14 +18,14 @@
 
 Hello World！
 
-```txt
+
 步骤：
-1. 在页面的 body 中放置一个需要通过 Vue 渲染的视图元素：<div id="app"></app>
-2. 在页面中引入 vue.js
-3. 创建 Vue 实例：new Vue()
-4. 设置 Vue 实例的参数选项：new Vue({ el: ..., data: ... })
-5. 在 <div id="app"></app> 内使用 {{}} 语法插入 data 中的数据
-```
+1. 在页面的 `body` 中放置一个需要通过 Vue 渲染的视图元素：`<div id="app"></app>`
+2. 在页面中引入 `vue.js`
+3. 创建 Vue 实例：`new Vue()`
+4. 设置 Vue 实例的参数选项：`new Vue({ el: ..., data: ... })`
+5. 在 `<div id="app"></app>` 内使用 `{{}}` 语法插入`data` 中的数据
+
 
 代码：
 
@@ -48,8 +48,6 @@ Hello World！
 </script>
 ```
 
-
-
 # Vue 介绍
 
 ## 插值表达式
@@ -67,7 +65,7 @@ Hello World！
 
 - 完整的JS语句，比如 `var a = 1; `, `if (...) ... else ...` 等
 
-```js
+```html
 <div id="app">
     <!-- 在插值表达式中可以访问vm实例中data里面的属性 -->
     {{ message }}
@@ -368,17 +366,41 @@ vm.$mount('#app')
 
 ## template:
 
-###
+**类型**：`string`
+
+**详细**：
+
+一个字符串模板作为 Vue 实例的标识使用。模板将会**替换**挂载的元素。挂载元素的内容都将被忽略，除非模板的内容有分发插槽。
+
+如果值以 `#` 开始，则它将被用作选择符，并使用匹配元素的 innerHTML 作为模板。常用的技巧是用 `<script type="x-template">` 包含模板。
+
+> 出于安全考虑，你应该只使用你信任的 Vue 模板。避免使用其他人生成的内容作为你的模板。
+
+> 如果 Vue 选项中包含渲染函数，该模板将被忽略。
 
 ## render:
 
-###
+**类型**：`(createElement: () => VNode) => VNode`
+
+**详细**：
+
+字符串模板的代替方案，允许你发挥 JavaScript 最大的编程能力。该渲染函数接收一个 `createElement` 方法作为第一个参数用来创建 `VNode`。
+
+如果组件是一个函数组件，渲染函数还会接收一个额外的 `context` 参数，为没有实例的函数组件提供上下文信息。
+
+> Vue 选项中的 `render` 函数若存在，则 Vue 构造函数不会从 `template` 选项或通过 `el` 选项指定的挂载元素中提取出的 HTML 模板编译渲染函数。
+
+> render: h => h(App) Vue提供用 h 代替createElement
 
 ## renderError:
 
-###
+- **类型**：`(createElement: () => VNode, error: Error) => VNode`
 
+- **详细**：
 
+  **只在开发者环境下工作。**
+
+  当 `render` 函数遭遇错误时，提供另外一种渲染输出。其错误将会作为第二个参数传递到 `renderError`。这个功能配合 hot-reload 非常实用。
 
 # 选项 / 数据 
 
@@ -475,19 +497,57 @@ vm.a // 2
 
 ## props
 
+**类型**：`Array<string> | Object`
 
+**详细**：
 
+props 可以是数组或对象，用于接收来自父组件的数据。props 可以是简单的数组，或者使用对象作为替代，对象允许配置高级选项，如类型检测、自定义验证和设置默认值。
 
+**Prop 的大小写 (camelCase vs kebab-case)**
+
+HTML 中的 attribute 名是大小写不敏感的，所以浏览器会把所有大写字符解释为小写字符。这意味着当你使用 DOM 中的模板时，camelCase (驼峰命名法) 的 prop 名需要使用其等价的 kebab-case (短横线分隔命名) 命名：
+
+```html
+Vue.component('blog-post', {
+  // 在 JavaScript 中是 camelCase 的
+  props: ['postTitle'],
+  template: '<h3>{{ postTitle }}</h3>'
+})
+<!-- 在 HTML 中是 kebab-case 的 -->
+<blog-post post-title="hello!"></blog-post>
+```
+
+重申一次，如果你使用字符串模板，那么这个限制就不存在了。
 
 ## propsData
 
-###
+- **类型**：`{ [key: string]: any }`
+
+- **限制**：只用于 `new` 创建的实例中。
+
+- **详细**：
+
+  创建实例时传递 props。主要作用是方便测试。
+
+  ```js
+  var Comp = Vue.extend({
+    props: ['msg'],
+    template: '<div>{{ msg }}</div>'
+  })
+  
+  var vm = new Comp({
+    propsData: {
+      msg: 'hello'
+    }
+  })
+  ```
+
 
 ## computed
 
-类型：`{ [key: string]: Function | { get: Function, set: Function } }`
+- 类型：`{ [key: string]: Function | { get: Function, set: Function } }`
 
-详细:
+- 详细:
 
 计算属性将被混入到 Vue 实例中。所有 getter 和 setter 的 this 上下文自动地绑定为 Vue 实例。
 
@@ -528,19 +588,70 @@ vm.a       // => 2
 vm.aDouble // => 4
 ```
 
-
-
 ## watch:
 
-###
+- **类型**：`{ [key: string]: string | Function | Object | Array }`
+
+- **详细**：
+
+一个对象，键是需要观察的表达式，值是对应回调函数。值也可以是方法名，或者包含选项的对象。Vue 实例将会在实例化时调用 `$watch()`，遍历 watch 对象的每一个 property。
+
+```js
+var vm = new Vue({
+  data: {
+    a: 1,
+    b: 2,
+    c: 3,
+    d: 4,
+    e: {
+      f: {
+        g: 5
+      }
+    }
+  },
+  watch: {
+    a: function (val, oldVal) {
+      console.log('new: %s, old: %s', val, oldVal)
+    },
+    // 方法名
+    b: 'someMethod',
+    // 该回调会在任何被侦听的对象的 property 改变时被调用，不论其被嵌套多深
+    c: {
+      handler: function (val, oldVal) { /* ... */ },
+      deep: true
+    },
+    // 该回调将会在侦听开始之后被立即调用
+    d: {
+      handler: 'someMethod',
+      immediate: true
+    },
+    // 你可以传入回调数组，它们会被逐一调用
+    e: [
+      'handle1',
+      function handle2 (val, oldVal) { /* ... */ },
+      {
+        handler: function handle3 (val, oldVal) { /* ... */ },
+        /* ... */
+      }
+    ],
+    // watch vm.e.f's value: {g: 5}
+    'e.f': function (val, oldVal) { /* ... */ }
+  }
+})
+vm.a = 2 // => new: 2, old: 1
+```
+
+
+
+> 注意，**不应该使用箭头函数来定义 watcher 函数** (例如 `searchQuery: newValue => this.updateAutocomplete(newValue)`)。理由是箭头函数绑定了父级作用域的上下文，所以 `this` 将不会按照期望指向 Vue 实例，`this.updateAutocomplete` 将是 undefined。
 
 # 选项 / 组合
 
 ## parent
 
-类型：`Vue instance`
+- 类型：`Vue instance`
 
-详细：
+- 详细：
 
 指定已创建的实例之父实例，在两者之间建立父子关系。子实例可以用 `this.$parent` 访问父实例，子实例被推入父实例的 `$children` 数组中。
 
@@ -548,31 +659,90 @@ vm.aDouble // => 4
 
 ## mixins
 
-###
+- **类型**：`Array<Object>`
+
+`mixins` 选项接收一个混入对象的数组。这些混入对象可以像正常的实例对象一样包含实例选项，这些选项将会被合并到最终的选项中，使用的是和 `Vue.extend()` 一样的选项合并逻辑。也就是说，如果你的混入包含一个 created 钩子，而创建组件本身也有一个，那么两个函数都会被调用。
+
+Mixin 钩子按照传入顺序依次调用，并在调用组件自身的钩子之前被调用。
+
+```js
+var mixin = {
+  created: function () { console.log(1) }
+}
+var vm = new Vue({
+  created: function () { console.log(2) },
+  mixins: [mixin]
+})
+// => 1
+// => 2
+```
 
 ## extends
 
-###
+- **类型**：`Object | Function`
+
+- **详细**：
+
+允许声明扩展另一个组件 (可以是一个简单的选项对象或构造函数)，而无需使用 `Vue.extend`。这主要是为了便于扩展单文件组件。
+
+这和 `mixins` 类似。
+
+```js
+var CompA = { ... }
+
+// 在没有调用 `Vue.extend` 时候继承 CompA
+var CompB = {
+  extends: CompA,
+  ...
+}
+```
 
 ## provide / inject
 
-###
+- **provide**：`Object | () => Object`
+- **inject**：`Array<string> | { [key: string]: string | Symbol | Object }`
+
+> `provide` 和 `inject` 主要在开发高阶插件/组件库时使用。并不推荐用于普通应用程序代码中。
+
+这对选项需要一起使用，以允许一个祖先组件向其所有子孙后代注入一个依赖，不论组件层次有多深，并在其上下游关系成立的时间里始终生效。如果你熟悉 React，这与 React 的上下文特性很相似。
+
+- `provide` 选项应该是一个对象或返回一个对象的函数。该对象包含可注入其子孙的 property。在该对象中你可以使用 ES2015 Symbols 作为 key，但是只在原生支持 `Symbol` 和 `Reflect.ownKeys` 的环境下可工作。
+
+- `inject` 选项应该是：
+
+  - 一个字符串数组，或
+  - 一个对象，对象的 key 是本地的绑定名，value 是：
+    - 在可用的注入内容中搜索用的 key (字符串或 Symbol)，或
+    - 一个对象，该对象的：
+      - `from` property 是在可用的注入内容中搜索用的 key (字符串或 Symbol)
+      - `default` property 是降级情况下使用的 value
+
+> 提示：`provide` 和 `inject` 绑定并不是可响应的。这是刻意为之的。然而，如果你传入了一个可监听的对象，那么其对象的 property 还是可响应的。
+
 
 # 选项 / 其它
 
 ## name
 
-###
+- **类型**：`string`
+
+- **限制**：只有作为组件选项时起作用。
+
+- **详细**：
+
+  允许组件模板递归地调用自身。注意，组件在全局用 `Vue.component()` 注册时，全局 ID 自动作为组件的 name。
+
+  指定 `name` 选项的另一个好处是便于调试。有名字的组件有更友好的警告信息。另外，当在有 [vue-devtools](https://github.com/vuejs/vue-devtools)，未命名组件将显示成 `<AnonymousComponent>`，这很没有语义。通过提供 `name` 选项，可以获得更有语义信息的组件树。
 
 ## inheritAttrs
 
 > 2.4.0 新增
 
-类型：`boolean`
+- 类型：`boolean`
 
-默认值：`true`
+- 默认值：`true`
 
-详细：
+- 详细：
 
 ​	默认情况下父作用域的不被认作 props 的 attribute 绑定 (attribute bindings) 将会“回退”且作为普通的 HTML attribute 应用在子组件的根元素上。当撰写包裹一个目标元素或另一个组件的组件时，这可能不会总是符合预期行为。通过设置 `inheritAttrs` 到 `false`，这些默认行为将会被去掉。而通过 (同样是 2.4 新增的) 实例 property `$attrs` 可以让这些 attribute 生效，且可以通过 `v-bind` 显性的绑定到非根元素上。
 
@@ -618,11 +788,11 @@ vm.aDouble // => 4
 
 > 2.4.0 新增
 
-类型：`{ [key: string]: string }`
+- 类型：`{ [key: string]: string }`
 
-**只读**
+- **只读**
 
-详细：
+- 详细：
 
 ​	包含了父作用域中不作为 prop 被识别 (且获取) 的 attribute 绑定 (`class` 和 `style` 除外)。当一个组件没有声明任何 prop 时，这里会包含所有父作用域的绑定 (`class` 和 `style` 除外)，并且可以通过 `v-bind="$attrs"` 传入内部组件——在创建高级别的组件时非常有用。
 
@@ -630,11 +800,11 @@ vm.aDouble // => 4
 
 > 2.4.0 新增
 
-类型：`{ [key: string]: Function | Array<Function> }`
+- 类型：`{ [key: string]: Function | Array<Function> }`
 
-**只读**
+- **只读**
 
-详细：
+- 详细：
 
 ​	包含了父作用域中的 (不含 `.native` 修饰器的) `v-on` 事件监听器。它可以通过 `v-on="$listeners"` 传入内部组件——在创建更高层次的组件时非常有用。
 
@@ -681,8 +851,6 @@ new Vue({
 })
 </script>
 ```
-
-
 
 # Vue 指令
 
@@ -1520,8 +1688,6 @@ Vue.directive('focus', {
 
 
 
-
-
 # 过滤器
 
 > 作用：对视图中要显示的数据做文本格式化
@@ -2233,6 +2399,219 @@ Vue.component('MyComponentName', { /* ... */ })
 
 版本管理更容易：如果由多人协作开发，可以避免代码覆盖和冲突。
 
+# 内置的组件
+
+## component
+
+- **Props**：
+
+  - `is` - string | ComponentDefinition | ComponentConstructor
+  - `inline-template` - boolean
+
+- **用法**：
+
+  渲染一个“元组件”为动态组件。依 `is` 的值，来决定哪个组件被渲染。
+
+  ```html
+  <!-- 动态组件由 vm 实例的 `componentId` property 控制 -->
+  <component :is="componentId"></component>
+  
+  <!-- 也能够渲染注册过的组件或 prop 传入的组件 -->
+  <component :is="$options.components.child"></component>
+  ```
+
+## keep-alive
+
+- **Props**：
+
+  - `include` - 字符串或正则表达式。只有名称匹配的组件会被缓存。
+  - `exclude` - 字符串或正则表达式。任何名称匹配的组件都不会被缓存。
+  - `max` - 数字。最多可以缓存多少组件实例。
+
+- **用法**：
+
+  `<keep-alive>` 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们。和 `<transition>` 相似，`<keep-alive>` 是一个抽象组件：它自身不会渲染一个 DOM 元素，也不会出现在组件的父组件链中。
+
+  当组件在 `<keep-alive>` 内被切换，它的 `activated` 和 `deactivated` 这两个生命周期钩子函数将会被对应执行。
+
+> 在 2.2.0 及其更高版本中，`activated` 和 `deactivated` 将会在 `<keep-alive>` 树内的所有嵌套组件中触发。
+
+主要用于保留组件状态或避免重新渲染。
+
+```html
+<!-- 基本 -->
+<keep-alive>
+  <component :is="view"></component>
+</keep-alive>
+
+<!-- 多个条件判断的子组件 -->
+<keep-alive>
+  <comp-a v-if="a > 1"></comp-a>
+  <comp-b v-else></comp-b>
+</keep-alive>
+
+<!-- 和 `<transition>` 一起使用 -->
+<transition>
+  <keep-alive>
+    <component :is="view"></component>
+  </keep-alive>
+</transition>
+```
+
+注意，`<keep-alive>` 是用在其一个直属的子组件被开关的情形。如果你在其中有 `v-for` 则不会工作。如果有上述的多个条件性的子元素，`<keep-alive>` 要求同时只有一个子元素被渲染。
+
+- **`include` and `exclude`**
+
+> 2.1.0 新增
+
+`include` 和 `exclude` prop 允许组件有条件地缓存。二者都可以用逗号分隔字符串、正则表达式或一个数组来表示：
+
+```html
+<!-- 逗号分隔字符串 -->
+<keep-alive include="a,b">
+  <component :is="view"></component>
+</keep-alive>
+
+<!-- 正则表达式 (使用 `v-bind`) -->
+<keep-alive :include="/a|b/">
+  <component :is="view"></component>
+</keep-alive>
+
+<!-- 数组 (使用 `v-bind`) -->
+<keep-alive :include="['a', 'b']">
+  <component :is="view"></component>
+</keep-alive>
+```
+
+匹配首先检查组件自身的 `name` 选项，如果 `name` 选项不可用，则匹配它的局部注册名称 (父组件 `components` 选项的键值)。匿名组件不能被匹配。
+
+- **`max`**
+
+> 2.5.0 新增
+
+最多可以缓存多少组件实例。一旦这个数字达到了，在新实例被创建之前，已缓存组件中最久没有被访问的实例会被销毁掉。
+
+```html
+<keep-alive :max="10">
+  <component :is="view"></component>
+</keep-alive>
+```
+
+> `<keep-alive>` 不会在函数式组件中正常工作，因为它们没有缓存实例。
+
+## slot
+
+- **Props**：
+
+  - `name` - string，用于命名插槽。
+
+- **Usage**：
+
+  `<slot>` 元素作为组件模板之中的内容分发插槽。`<slot>` 元素自身将被替换。
+
+  详细用法，请参考下面教程的链接。
+
+- **参考**：[通过插槽分发内容](https://cn.vuejs.org/v2/guide/components.html#通过插槽分发内容)
+
+## transition
+
+- **Props**：
+
+  - `name` - string，用于自动生成 CSS 过渡类名。例如：`name: 'fade'` 将自动拓展为 `.fade-enter`，`.fade-enter-active` 等。默认类名为 `"v"`
+  - `appear` - boolean，是否在初始渲染时使用过渡。默认为 `false`。
+  - `css` - boolean，是否使用 CSS 过渡类。默认为 `true`。如果设置为 `false`，将只通过组件事件触发注册的 JavaScript 钩子。
+  - `type` - string，指定过渡事件类型，侦听过渡何时结束。有效值为 `"transition"` 和 `"animation"`。默认 Vue.js 将自动检测出持续时间长的为过渡事件类型。
+  - `mode` - string，控制离开/进入过渡的时间序列。有效的模式有 `"out-in"` 和 `"in-out"`；默认同时进行。
+  - `duration` - number | { `enter`: number, `leave`: number } 指定过渡的持续时间。默认情况下，Vue 会等待过渡所在根元素的第一个 `transitionend` 或 `animationend` 事件。
+  - `enter-class` - string
+  - `leave-class` - string
+  - `appear-class` - string
+  - `enter-to-class` - string
+  - `leave-to-class` - string
+  - `appear-to-class` - string
+  - `enter-active-class` - string
+  - `leave-active-class` - string
+  - `appear-active-class` - string
+
+- **事件**：
+
+  - `before-enter`
+  - `before-leave`
+  - `before-appear`
+  - `enter`
+  - `leave`
+  - `appear`
+  - `after-enter`
+  - `after-leave`
+  - `after-appear`
+  - `enter-cancelled`
+  - `leave-cancelled` (`v-show` only)
+  - `appear-cancelled`
+
+- **用法**：
+
+  `<transition>` 元素作为**单个**元素/组件的过渡效果。`<transition>` 只会把过渡效果应用到其包裹的内容上，而不会额外渲染 DOM 元素，也不会出现在可被检查的组件层级中。
+
+  ```html
+  <!-- 简单元素 -->
+  <transition>
+    <div v-if="ok">toggled content</div>
+  </transition>
+  
+  <!-- 动态组件 -->
+  <transition name="fade" mode="out-in" appear>
+    <component :is="view"></component>
+  </transition>
+  
+  <!-- 事件钩子 -->
+  <div id="transition-demo">
+    <transition @after-enter="transitionComplete">
+      <div v-show="ok">toggled content</div>
+    </transition>
+  </div>
+  new Vue({
+    ...
+    methods: {
+      transitionComplete: function (el) {
+        // 传入 'el' 这个 DOM 元素作为参数。
+      }
+    }
+    ...
+  }).$mount('#transition-demo')
+  ```
+
+##  transition-group
+
+
+
+- **Props**：
+
+  - `tag` - string，默认为 `span`
+  - `move-class` - 覆盖移动过渡期间应用的 CSS 类。
+  - 除了 `mode`，其他 attribute 和 `<transition>` 相同。
+
+- **事件**：
+
+  - 事件和 `<transition>` 相同。
+
+- **用法**：
+
+  `<transition-group>` 元素作为多个元素/组件的过渡效果。`<transition-group>` 渲染一个真实的 DOM 元素。默认渲染 `<span>`，可以通过 `tag` attribute 配置哪个元素应该被渲染。
+
+  注意，每个 `<transition-group>` 的子节点必须有**独立的 key**，动画才能正常工作
+
+  `<transition-group>` 支持通过 CSS transform 过渡移动。当一个子节点被更新，从屏幕上的位置发生变化，它会被应用一个移动中的 CSS 类 (通过 `name` attribute 或配置 `move-class` attribute 自动生成)。如果 CSS `transform` property 是“可过渡”property，当应用移动类时，将会使用 [FLIP 技术](https://aerotwist.com/blog/flip-your-animations/)使元素流畅地到达动画终点。
+
+  ```html
+  <transition-group tag="ul" name="slide">
+    <li v-for="item in items" :key="item.id">
+      {{ item.text }}
+    </li>
+  </transition-group>
+  ```
+
+- **参考**：[过渡：进入，离开和列表](https://cn.vuejs.org/v2/guide/transitions.html)
+
 # 组件间通信
 
 组件提供了对代码的封装复用能力，但对于构建一个完整的应用程序，肯定会遇上多个组件间需要互相协作的情况。所以，组件需要有互相通信的机制。
@@ -2687,9 +3066,19 @@ var vm = new Vue({
 
 ## 六、Vuex
 
-###
+Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。
 
+它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化.
 
+Vuex 解决了多个视图依赖于同一状态和来自不同视图的行为需要变更同一状态的问题，将开发者的精力聚焦于数据的更新而不是数据在组件之间的传递上
+
+Vuex各个模块
+
+- state：用于数据的存储，是store中的唯一数据源
+- getters：如vue中的计算属性一样，基于state数据的二次包装，常用于数据的筛选和多个数据的相关性计算
+- mutations：类似函数，改变state数据的唯一途径，且不能用于处理异步事件
+- actions：类似于mutation，用于提交mutation来改变状态，而不直接变更状态，可以包含任意异步操作
+- modules：类似于命名空间，用于项目中将各个模块的状态分开定义和操作，便于维护
 
 ## 七、`localStorage` / `sessionStorage`
 
@@ -2803,8 +3192,6 @@ export default {
 - 父子组件通信: `props` ; `$parent` / `$children`; `provide` / `inject` ; `ref `; `$attrs` / `$listeners`
 - 兄弟组件通信: eventBus ; Vuex
 - 跨级通信: eventBus; Vuex; `provide` / `inject` 、`$attrs` / `$listeners`
-
-
 
 
 
@@ -3223,59 +3610,7 @@ Vue.prototype.$destroy = function () {
 
 ### activated & deactivated
 
-`activated` 和 `deactivated` 钩子函数是专门为 `keep-alive` 组件定制的钩子
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+keep-alive 缓存的组件激活和缓存时调用。
 
 # Vuex
 
@@ -4175,54 +4510,6 @@ export default {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Vue Router
 
 **前端路由基础：**
@@ -4377,6 +4664,8 @@ history.replaceState(stateObj, title[, url]);
     changePageContent({}, 'home', '/');
 </script>
 ```
+
+
 
 ## 前端路由管理 Vue Router
 
@@ -5630,8 +5919,8 @@ const Baz = () => import(/* webpackChunkName: "group-foo" */ './Baz.vue')
 
 Webpack 会将任何一个异步模块与相同的块名称组合到相同的异步块中。
 
-# [Vue Router API](https://router.vuejs.org/zh/api/#router-link)
+[Vue Router API](https://router.vuejs.org/zh/api/#router-link)
 
 # Vue CLI
 
-###
+脚手架
