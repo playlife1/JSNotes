@@ -4,7 +4,7 @@
 
 ```text
 .
-├── NodeJS.md // 笔记本体
+├── Node.md // 笔记本体
 ├── README.md 
 ├── code // 笔记中实现案例代码
 │   ├── RequireJS // AMD 实现
