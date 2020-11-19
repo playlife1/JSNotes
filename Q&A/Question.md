@@ -4,19 +4,23 @@
 
 interview
 
-寄生组合继承和extends继承的区别和new做了什么
+- [x] 寄生组合继承 和 extends 继承的区别
+
+
+new做了什么✅
 
 数组构造函数上有哪些方法（Array.isArray、Array.from、Array.of），数组实例有哪些方法，如何准确的判断数组等都不知道。数组、字符串、对象等API需要熟记于心
 
-- 冒泡 / 快排 - 排序类算法
+- 冒泡✅ / 快排 - 排序类算法
 - LRU / 排列组合 - 应用类算法
 - 链表 / 堆 / 栈 / 树 / 图 - 数据结构类算法
 - 分治 / 动规 - 算法思想
-- 深度优先 / 广度优先
+- 深度优先 / 广度优先✅
 
 
 
-requestAnimationFrame
+- [x] requestAnimationFrame
+
 
 
 
@@ -26,17 +30,21 @@ js基础知识：
 
 ​	从输入url到获得页面经历的所有事情(越细越好)
 
-​	原型链
+- [x] 原型链
 
-​	继承
+
+- [x] 继承
+
 
 ​	es6新特性
 
 DOM事件和事件流
 
-盒子模型
+- [x] 盒子模型
 
-事件循环
+
+- [x] 事件循环
+
 
 BFC
 
@@ -46,9 +54,11 @@ Promise原理以及手写代码promise(基本上要求可以手写Promise.all方
 
 
 
-vue响应式原理
+- [x] vue响应式原理
 
-vue虚拟dom & diff算法
+
+- [x] vue虚拟dom & diff算法
+
 
 前端性能优化
 
@@ -71,7 +81,14 @@ get 和 post 的区别
 yield
 如何给localStorage加上max-age功能
 
-Object.defineProperties都有那些参数,以及参数解释
+
+
+- [x] Object.defineProperties都有那些参数,以及参数解释
+
+
+
+
+
 requestAnimation
 手写原型链和js各种继承模式
 

@@ -3612,7 +3612,7 @@ Vue.prototype.$destroy = function () {
 
 keep-alive 缓存的组件激活和缓存时调用。
 
-# Vuex
+# Vuex 
 
 Vuex 是一个专为 Vue.js 应用程序开发的**状态管理模式**。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化
 
@@ -6083,4 +6083,175 @@ methods: {
 当只用 JavaScript 过渡的时候，**在 `enter` 和 `leave` 中必须使用 `done` 进行回调**。否则，它们将被同步调用，过渡会立即完成。
 
 推荐对于仅使用 JavaScript 过渡的元素添加 `v-bind:css="false"`，Vue 会跳过 CSS 的检测。这也可以避免过渡过程中 CSS 的影响。
+
+# Vue 响应式原理 
+
+> 数据劫持（data hijack），指的是在访问或者修改对象的某个属性时，通过一段代码拦截这个行为，进行额外的操作或者修改返回结果。
+
+## 数据双向绑定
+
+**数据双向绑定**是一种模式，Web 语境下一般指数据从 Dom 到 JavaScript 对象之间的自动同步。
+
+DOM 与 JavaScript 被隔离在两个不同的运行时上，互相之间需要通过命令式的 DOM 接口沟通：
+
+DOM 需要正确触发事件，将信息传输给 JS 程序；而 JS也需要在状态变更后，有意识地调用适当的接口，改变DOM内容。
+
+这种方式会引起两个问题：
+
+1. 状态的管理与展现是完全剥离开的两套不同逻辑，需要刻意保持同步，这是很高的开发成本。
+2. DOM 规范定义了不少接口，而且有兼容性问题，这是很高的学习成本
+
+双向绑定通过各种各样的设计，将数据从 DOM 到 JS 或者从 JS 到 DOM 的同步过程，封装在框架本身，上层代码脱离了对底层接口的依赖，只需要关注状态管理逻辑。
+
+## Object.defineProperty
+
+Vue2.x 版本使用元编程接口 `Object.defineProperty` 实现数据劫持，从而达到 `数据<=>视图`双向绑定。
+
+在组件初始化时，会调用该接口，将对象属性包装为 `get` 、`set` 函数，将代码 “埋入” 属性的 “获取”、“修改” 行为中。
+
+**`Object.defineProperty()`** 方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，并返回此对象。
+
+> **备注：**应当直接在 `Object`构造器对象上调用此方法，而不是在任意一个 `Object` 类型的实例上调用。
+
+语法：
+
+```js
+Object.defineProperty(obj, prop, descriptor)
+```
+
+参数:
+
+- `obj`
+
+  要定义属性的对象。
+
+- `prop`
+
+  要定义或修改的属性的名称或 [`Symbol`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 。
+
+- `descriptor`
+
+  要定义或修改的属性描述符。
+
+返回值: 被传递给函数的对象。
+
+当你把一个普通的 JavaScript 对象传入 Vue 实例作为 `data` 选项，Vue 将遍历此对象所有的 property，并使用`Object.defineProperty` 把这些 property 全部转为 getter/setter。
+
+`Object.defineProperty` 是 ES5 中一个无法 shim 的特性，这也就是 Vue 不支持 IE8 以及更低版本浏览器的原因。
+
+每个组件实例都对应一个 **watcher** 实例，它会在组件渲染的过程中把“接触”过的数据 property 记录为依赖。之后当依赖项的 setter 触发时，会通知 watcher，从而使它关联的组件重新渲染。
+
+## 依赖管理方案
+
+`Object.defineProperty` 只是解决了状态变更后，如何触发通知的问题。谁来接受这些通知，处理这些通知呢？
+
+在 Vue 中，使用 `Dep` 解耦了依赖者与被依赖者之间关系的确定过程。
+
+- 第一步，通过 `Observer` 提供的接口，遍历状态对象，给对象的每个属性、子属性都绑定了一个专用的 `Dep `对象。这里的状态对象主要指组件当中的 `data` 属性。
+
+- 第二步，创建三中类型的watcher：
+  1. 调用 `initComputed` 将 `computed` 属性转化为 **watcher 实例**
+  2. 调用 `initWatch` 方法，将 `watch` 配置转化为 **watcher 实例**
+  3. 调用 `mountComponent` 方法，为 `render` 函数绑定 **watcher 实例**
+- 第三步，状态变更后，触发 `dep.notify()` 函数，该函数再进一步触发 Watcher 对象 update 函数，执行watcher的重新计算。
+
+![Data-hijacking](./media/Data-hijacking.jpg)
+
+注意，Vue 组件中的 `render` 函数，我们可以单纯将其视为一种特殊的 `computed` 函数，在它所对应的 Watcher 对象发生变化时，触发执行 `render`，生成新的 virutal-dom 结构，再交由 Vue 做 diff，更新视图。
+
+Vue 使用数据劫持作为底层支撑，又设计了一套精妙的依赖管理方案解耦依赖。但数据劫持方案也有其难以解决的痛点：
+
+- 只能应用于简单对象
+- 对数组无效，所以需要包装数组方法
+- 属性劫持的出发点是“变”，所以 Vue 无法很好接入“immutable”模式
+
+由于 JavaScript 的限制，Vue **不能检测**数组和对象的变化。尽管如此我们还是有一些办法来回避这些限制并保证它们的响应性。
+
+Vue 无法检测 property 的添加或移除。由于 Vue 会在初始化实例时对 property 执行 getter/setter 转化，所以 property 必须在 `data` 对象上存在才能让 Vue 将它转换为响应式的。例如：
+
+```js
+var vm = new Vue({
+  data:{
+    a:1
+  }
+})
+
+// `vm.a` 是响应式的
+
+vm.b = 2
+// `vm.b` 是非响应式的
+```
+
+对于已经创建的实例，Vue 不允许动态添加根级别的响应式 property。但是，可以使用 `Vue.set(object, propertyName, value)` 方法向嵌套对象添加响应式 property。例如，对于：
+
+```js
+Vue.set(vm.someObject, 'b', 2)
+```
+
+您还可以使用 `vm.$set` 实例方法，这也是全局 `Vue.set` 方法的别名：
+
+```js
+this.$set(this.someObject,'b',2)
+```
+
+有时你可能需要为已有对象赋值多个新 property，比如使用 `Object.assign()` 或 `_.extend()`。但是，这样添加到对象上的新 property 不会触发更新。在这种情况下，你应该用原对象与要混合进去的对象的 property 一起创建一个新的对象。
+
+```js
+// 代替 `Object.assign(this.someObject, { a: 1, b: 2 })`
+this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
+```
+
+Vue 不能检测以下数组的变动：
+
+1. 当你利用索引直接设置一个数组项时，例如：`vm.items[indexOfItem] = newValue`
+2. 当你修改数组的长度时，例如：`vm.items.length = newLength`
+
+举个例子：
+
+```js
+var vm = new Vue({
+  data: {
+    items: ['a', 'b', 'c']
+  }
+})
+vm.items[1] = 'x' // 不是响应性的
+vm.items.length = 2 // 不是响应性的
+```
+
+为了解决第一类问题，以下两种方式都可以实现和 `vm.items[indexOfItem] = newValue` 相同的效果，同时也将在响应式系统内触发状态更新：
+
+```js
+// Vue.set
+Vue.set(vm.items, indexOfItem, newValue)
+// Array.prototype.splice
+vm.items.splice(indexOfItem, 1, newValue)
+```
+
+你也可以使用 [`vm.$set`](https://cn.vuejs.org/v2/api/#vm-set) 实例方法，该方法是全局方法 `Vue.set` 的一个别名：
+
+```js
+vm.$set(vm.items, indexOfItem, newValue)
+```
+
+为了解决第二类问题，你可以使用 `splice`：
+
+```js
+vm.items.splice(newLength)
+```
+
+## 异步更新队列
+
+Vue 在更新 DOM 时是**异步**执行的。只要侦听到数据变化，Vue 将开启一个队列，并缓冲在同一事件循环中发生的所有数据变更。
+
+如果同一个 watcher 被多次触发，只会被推入到队列中一次。这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作是非常重要的。
+
+然后，在下一个的事件循环“tick”中，Vue 刷新队列并执行实际 (已去重的) 工作。Vue 在内部对异步队列尝试使用原生的 `Promise.then`、`MutationObserver` 和 `setImmediate`，如果执行环境不支持，则会采用 `setTimeout(fn, 0)` 代替。
+
+例如，当你设置 `vm.someData = 'new value'`，该组件不会立即重新渲染。当刷新队列时，组件会在下一个事件循环“tick”中更新。
+
+多数情况我们不需要关心这个过程，但是如果你想基于更新后的 DOM 状态来做点什么，这就可能会有些棘手。
+
+虽然 Vue.js 通常鼓励开发人员使用“数据驱动”的方式思考，避免直接接触 DOM，但是有时我们必须要这么做。为了在数据变化之后等待 Vue 完成更新 DOM，可以在数据变化之后立即使用 `Vue.nextTick(callback)`。这样回调函数将在 DOM 更新完成后被调用
+
+因为 `$nextTick()` 返回一个 `Promise` 对象，所以你可以使用新的 ES2017 async/await 语法完成
 
