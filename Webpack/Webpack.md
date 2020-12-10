@@ -1891,7 +1891,7 @@ devServer: {
 }
 ```
 
-# webpack处理vue
+# Webpack处理vue
 
 ## vue-loader的配置
 
@@ -1969,3 +1969,83 @@ module.exports = {
 }
 ```
 
+# 常用 Loaders
+
+### 加载文件
+
+- **[raw-loader](https://github.com/webpack-contrib/raw-loader)**：把文本文件的内容加载到代码中去。
+- **[file-loader](https://github.com/webpack-contrib/file-loader)**：把文件输出到一个文件夹中，在代码中通过相对 URL 去引用输出的文件。
+- **[url-loader](https://github.com/webpack-contrib/url-loader)**：和 file-loader 类似，但是能在文件很小的情况下以 base64 的方式把文件内容注入到代码中去。
+- **[source-map-loader](https://github.com/webpack-contrib/source-map-loader)**：加载额外的 Source Map 文件，以方便断点调试。
+- **[svg-inline-loader](https://github.com/webpack-contrib/svg-inline-loader)**：把压缩后的 SVG 内容注入到代码中。
+- **[node-loader](https://github.com/webpack-contrib/node-loader)**：加载 Node.js 原生模块 `.node` 文件。
+- **[image-loader](https://github.com/tcoopman/image-webpack-loader)**：加载并且压缩图片文件。
+- **[json-loader](https://github.com/webpack-contrib/json-loader)**：加载 JSON 文件。
+- **[yaml-loader](https://github.com/okonet/yaml-loader)**：加载 YAML 文件。
+
+### 编译模版
+
+- **[pug-loader](https://github.com/pugjs/pug-loader)**：把 Pug 模版转换成 JavaScript 函数返回。
+- **[handlebars-loader](https://github.com/pcardune/handlebars-loader)**：把 Handlebars 模版编译成函数返回。
+- **[ejs-loader](https://github.com/okonet/ejs-loader)**：把 EJS 模版编译成函数返回。
+- **[haml-loader](https://github.com/AlexanderPavlenko/haml-loader)**：把 HAML 代码转换成 HTML。
+- **[markdown-loader](https://github.com/peerigon/markdown-loader)**：把 Markdown 文件转换成 HTML。
+
+### 转换脚本语言
+
+- **[babel-loader](https://github.com/babel/babel-loader)**：把 ES6 转换成 ES5。
+- **[ts-loader](https://github.com/TypeStrong/ts-loader)**：把 TypeScript 转换成 JavaScript。
+- **[awesome-typescript-loader](https://github.com/s-panferov/awesome-typescript-loader)**：把 TypeScript 转换成 JavaScript，性能要比 ts-loader 好。
+- **[coffee-loader](https://github.com/webpack-contrib/coffee-loader)**：把 CoffeeScript 转换成 JavaScript。
+
+### 转换样式文件
+
+- **[css-loader](https://github.com/webpack-contrib/css-loader)**：加载 CSS，支持模块化、压缩、文件导入等特性。
+- **[style-loader](https://github.com/webpack-contrib/style-loader)**：把 CSS 代码注入到 JavaScript 中，通过 DOM 操作去加载 CSS。
+- **[sass-loader](https://github.com/webpack-contrib/sass-loader)**：把 SCSS/SASS 代码转换成 CSS。
+- **[postcss-loader](https://github.com/postcss/postcss-loader)**：扩展 CSS 语法，使用下一代 CSS。
+- **[less-loader](https://github.com/webpack-contrib/less-loader)**：把 Less 代码转换成 CSS 代码。
+- **[stylus-loader](https://github.com/shama/stylus-loader)**：把 Stylus 代码转换成 CSS 代码。
+
+### 检查代码
+
+- **[eslint-loader](https://github.com/MoOx/eslint-loader)**：通过 ESLint 检查 JavaScript 代码。
+- **[tslint-loader](https://github.com/wbuchwalter/tslint-loader)**：通过 TSLint 检查 TypeScript 代码。
+- **[mocha-loader](https://github.com/webpack-contrib/mocha-loader)**：加载 Mocha 测试用例代码。
+- **[coverjs-loader](https://github.com/webpack-contrib/coverjs-loader)**：计算测试覆盖率。
+
+### 其它
+
+- **[vue-loader](https://github.com/vuejs/vue-loader)**：加载 Vue.js 单文件组件。
+- **[i18n-loader](https://github.com/webpack-contrib/i18n-loader)**：加载多语言版本，支持国际化。
+- **[ignore-loader](https://github.com/cherrry/ignore-loader)**：忽略掉部分文件。
+- **[ui-component-loader](https://github.com/gwuhaolin/ui-component-loader)**：按需加载 UI 组件库，例如在使用 antd UI 组件库时，不会因为只用到了 Button 组件而打包进所有的组件。
+
+# 常用 Plugins
+
+### 用于修改行为
+
+- **[define-plugin](https://webpack.js.org/plugins/define-plugin/)**：定义环境变量。
+- **[context-replacement-plugin](https://webpack.js.org/plugins/context-replacement-plugin/)**：修改 `require` 语句在寻找文件时的默认行为。
+- **[ignore-plugin](https://webpack.js.org/plugins/ignore-plugin/)**：用于忽略部分文件。
+
+### 用于优化
+
+- **[commons-chunk-plugin](https://webpack.js.org/plugins/commons-chunk-plugin/)**：提取公共代码。
+- **[extract-text-webpack-plugin](https://github.com/webpack-contrib/extract-text-webpack-plugin)**：提取 JavaScript 中的 CSS 代码到单独的文件中。
+- **[prepack-webpack-plugin](https://github.com/gajus/prepack-webpack-plugin)**：通过 Facebook 的 Prepack 优化输出的 JavaScript 代码性能。
+- **[uglifyjs-webpack-plugin](https://github.com/webpack-contrib/uglifyjs-webpack-plugin)**：通过 UglifyES 压缩 ES6 代码。
+- **[webpack-parallel-uglify-plugin](https://github.com/gdborton/webpack-parallel-uglify-plugin)**：多进程执行 UglifyJS 代码压缩，提升构建速度。
+- **[imagemin-webpack-plugin](https://www.npmjs.com/package/imagemin-webpack-plugin)**：压缩图片文件。
+- **[webpack-spritesmith](https://www.npmjs.com/package/webpack-spritesmith)**：用插件制作雪碧图。
+- **[ModuleConcatenationPlugin](https://webpack.js.org/plugins/module-concatenation-plugin/)**：开启 Webpack Scope Hoisting 功能。
+- **[dll-plugin](https://webpack.js.org/plugins/dll-plugin/)**：借鉴 DDL 的思想大幅度提升构建速度。
+- **[hot-module-replacement-plugin](https://webpack.js.org/plugins/hot-module-replacement-plugin/)**：开启模块热替换功能。
+
+### 其它
+
+- **[serviceworker-webpack-plugin](https://github.com/oliviertassinari/serviceworker-webpack-plugin)**：给网页应用增加离线缓存功能。
+- **[stylelint-webpack-plugin](https://github.com/JaKXz/stylelint-webpack-plugin)**：集成 stylelint 到项目中。
+- **[i18n-webpack-plugin](https://github.com/webpack-contrib/i18n-webpack-plugin)**：给你的网页支持国际化。
+- **[provide-plugin](https://webpack.js.org/plugins/provide-plugin/)**：从环境中提供的全局变量中加载模块，而不用导入对应的文件。
+- **[web-webpack-plugin](https://github.com/gwuhaolin/web-webpack-plugin)**：方便的为单页应用输出 HTML，比 html-webpack-plugin 好用。

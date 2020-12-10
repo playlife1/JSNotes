@@ -1,8 +1,30 @@
 # HTML&CSS
 
-> HTML 和 CSS 实战经典代码、案例理解
->
-> HTML5、CSS3 新标准、新特性，以及一些实验性的功能，面向未来
+> HTML & CSS 碎片相关知识点
+
+# HTML 元素标签语义化
+
+### 一、标签语义化是什么？
+
+标签语义化就是让元素标签做适当的事情。例如 `p` 标签就是代表文本，`button` 标签代表按钮，`nav` 标签代表导航等等。
+
+### 二、为什么要标签语义化？
+
+其实标签语义化是给浏览器和搜索引擎看的。
+
+#### 为什么浏览器关心？
+
+DOM 的大部分内容具有隐式语义含义。 也就是说，DOM 采用的原生 HTML 元素能够被浏览器识别，并且可以预测其在各类平台上的工作方式。
+
+例如用 `div` 实现的按钮和用原生 `button` 实现的按钮就有一些区别，在表单内 `button` 可以不用绑定 onclick 事件就可以提交表单内容，用 `div` 实现的按钮则不行。另外在浏览器中按 tab 键盘可以在 `button` 之间来回切换，而 `div` 则不可以。
+
+还有 `input` 标签 type 属性，由于值的不同在手机上的表现也不同。例如 type="tel" 和 type="number" 弹出来的数字键盘是不一样的。
+
+#### 为什么搜索引擎关心？
+
+搜索引擎的爬虫根据标签来确定上下文、关键字的权重，有利于 SEO。
+
+
 
 # 盒子模型
 
@@ -72,7 +94,41 @@ BFC 特性
 
 BFC 可以包含浮动的元素 用于**清除浮动**
 
+# 清除浮动的方式
 
+1. 给外部盒子也添加浮动 （BFC 可以包含浮动的元素 用于**清除浮动**）
+   缺点：可读性差，不易于维护（别人很难理解为什么要给父元素也添上float），而且可能需要调整整个页面布局。
+
+2. 在外部盒子内最下方添上带clear属性的空盒子
+
+   可以是div也可以是其它块级元素，把 `<div style="clear:both;"></div>`放在盒内底部，用最下面的空盒子清除浮动，把盒子重新撑起来。
+   缺点：引入了冗余元素
+
+3. 用`overflow:hidden `清除浮动 (计算BFC的高度时，浮动子元素也参与计算)
+   给外部盒子添上这个属性
+   缺点：有可能造成溢出元素不可见，影响展示效果。
+
+4. 用伪元素清除浮动
+   给外部盒子的 after 伪元素设置 clear 属性，再隐藏它
+   这其实是对空盒子方案的改进，一种纯 CSS 的解决方案，不用引入冗余元素。
+
+   ```css
+   /*清除浮动*/
+   .clearfix::before,
+   .clearfix::after {
+       content: '';
+       display: table;
+   }
+   .clearfix::after {
+       clear: both;
+   }
+   ```
+
+   这也是 bootstrap 框架采用的清除浮动的方法。
+
+5. 定高法	
+
+   给每个盒子规定 width 和 height，要多大给多大即可。但是这样的布局不是内容自适应的，如果页面内容极少发生变动，这也是一个不错的方案，因为它的兼容性是毋庸置疑的。
 
 # HTML5 新添加特性简单说明
 
@@ -118,37 +174,37 @@ Web Storage API：sessionStorage(保存在session中，浏览器关闭，数据�
 > 新增加了一些选择器
 
 ```css
-element1~element2: 选择前面有element1元素的每个element2元素。
-[attribute^=value]: 选择某元素attribute属性是以value开头的。
-[attribute$=value]: 选择某元素attribute属性是以value结尾的。
-[attribute*=value]: 选择某元素attribute属性包含value字符串的。
-E:first-of-type: 选择属于其父元素的首个E元素的每个E元素。
-E:last-of-type: 选择属于其父元素的最后E元素的每个E元素。
-E:only-of-type: 选择属于其父元素唯一的E元素的每个E元素。
-E:only-child: 选择属于其父元素的唯一子元素的每个E元素。
-E:nth-child(n): 选择属于其父元素的第n个子元素的每个E元素。
-E:nth-last-child(n): 选择属于其父元素的倒数第n个子元素的每个E元素。
-E:nth-of-type(n): 选择属于其父元素第n个E元素的每个E元素。
-E:nth-last-of-type(n): 选择属于其父元素倒数第n个E元素的每个E元素。
-E:last-child: 选择属于其父元素最后一个子元素每个E元素。
-:root: 选择文档的根元素。
-E:empty: 选择没有子元素的每个E元素（包括文本节点)。
-E:target: 选择当前活动的E元素。
-E:enabled: 选择每个启用的E元素。
-E:disabled: 选择每个禁用的E元素。
-E:checked: 选择每个被选中的E元素。
-E:not(selector): 选择非selector元素的每个元素。
-E::selection: 选择被用户选取的元素部分。
+element1~element2: /*选择前面有element1元素的每个element2元素。*/
+[attribute^=value]:/*选择某元素attribute属性是以value开头的。*/
+[attribute$=value]:/*选择某元素attribute属性是以value结尾的。*/
+[attribute*=value]:/*选择某元素attribute属性包含value字符串的。*/
+E:first-of-type: /*选择属于其父元素的首个E元素的每个E元素。*/
+E:last-of-type: /*选择属于其父元素的最后E元素的每个E元素。*/
+E:only-of-type: /*选择属于其父元素唯一的E元素的每个E元素。*/
+E:only-child: /*选择属于其父元素的唯一子元素的每个E元素。*/
+E:nth-child(n): /*选择属于其父元素的第n个子元素的每个E元素。*/
+E:nth-last-child(n): /*选择属于其父元素的倒数第n个子元素的每个E元素。*/
+E:nth-of-type(n): /*选择属于其父元素第n个E元素的每个E元素。*/
+E:nth-last-of-type(n): /*选择属于其父元素倒数第n个E元素的每个E元素。*/
+E:last-child: /*选择属于其父元素最后一个子元素每个E元素。*/
+:root: /*选择文档的根元素。*/
+E:empty: /*选择没有子元素的每个E元素（包括文本节点)。*/
+E:target: /*选择当前活动的E元素。*/
+E:enabled: /*选择每个启用的E元素。*/
+E:disabled: /*选择每个禁用的E元素。*/
+E:checked: /*选择每个被选中的E元素。*/
+E:not(selector): /*选择非selector元素的每个元素。*/
+E::selection: /*选择被用户选取的元素部分。*/
 ```
 
 ## transform
 
-> CSS**`transform`**属性允许你旋转，缩放，倾斜或平移给定元素。这是通过修改CSS视觉格式化模型的坐标空间来实现的。
+> CSS `transform` 属性允许你旋转，缩放，倾斜或平移给定元素。这是通过修改CSS视觉格式化模型的坐标空间来实现的。
 
 ```css
 transform:matrix translate scale rotate skew perspective；
 transform-style: preserve-3d;/*真3d效果*/
-transform-orign/*转换发生位置*/
+transform-orign/*转换发生位置*/ 
 ```
 
 ## 过渡与动画
@@ -377,3 +433,235 @@ flex: unset;
 - `scale-down`
 
   内容的尺寸与 `none` 或 `contain` 中的一个相同，取决于它们两个之间谁得到的对象尺寸会更小一些。
+
+## word-break
+
+CSS 属性 `word-break` 指定了怎样在单词内断行。
+
+**语法：**
+
+```css
+/* Keyword values */
+word-break: normal; 
+word-break: break-all; 
+word-break: keep-all;
+word-break: break-word; /* deprecated */
+
+/* Global values */
+word-break: inherit;
+word-break: initial;
+word-break: unset;
+```
+
+**值:**
+
+- `normal` 使用默认的断行规则。
+
+- `break-all` 对于non-CJK (CJK 指中文/日文/韩文) 文本，可在任意字符间断行。
+
+- `keep-all` CJK 文本不断行。 Non-CJK 文本表现同 `normal`。
+
+- `break-word` 他的效果是`word-break: normal` 和 `overflow-wrap: anywhere` 的合，不论 `overflow-wrap`的值是多少。
+
+
+
+## white-space
+
+CSS 属性`white-space` 是用来设置如何处理元素中的空白。
+
+语法：
+
+```css
+/* Keyword values */
+white-space: normal;
+white-space: nowrap;
+white-space: pre;
+white-space: pre-wrap;
+white-space: pre-line;
+
+/* https://github.com/w3c/csswg-drafts/pull/2841 */
+white-space: break-spaces;
+
+/* Global values */
+white-space: inherit;
+white-space: initial;
+white-space: unset;	
+```
+
+**值:**
+
+- `normal`
+
+  连续的空白符会被合并，换行符会被当作空白符来处理。换行在填充「行框盒子」时是必要。
+
+- `nowrap`
+
+  和 normal 一样，连续的空白符会被合并。但文本内的换行无效。
+
+- `pre`
+
+  连续的空白符会被保留。在遇到换行符或者`<br>`元素时才会换行。 
+
+- `pre-wrap`
+
+  连续的空白符会被保留。在遇到换行符或者`<br>`元素，或者需要为了填充「行框盒子」时才会换行。
+
+- `pre-line`
+
+  连续的空白符会被合并。在遇到换行符或者`<br>`元素，或者需要为了填充「行框盒子」时会换行。
+
+- `break-spaces`与 `pre-wrap`的行为相同，除了：
+  - 任何保留的空白序列总是占用空间，包括在行尾。
+  - 每个保留的空格字符后都存在换行机会，包括空格字符之间。
+  - 这样保留的空间占用空间而不会挂起，从而影响盒子的固有尺寸（最小内容大小和最大内容大小）。
+
+对于展示文章可以结合使用
+
+```css
+.article{
+  /*连续的空白符会被保留。在遇到换行符或者<br>元素，或者需要为了填充「行框盒子(line boxes)」时才会换行。*/
+	white-space: pre-wrap;
+	/*对于non-CJK (CJK 指中文/日文/韩文) 文本，可在任意字符间断行。*/
+	word-break: break-all;
+}
+```
+
+
+
+# 页面导入样式时，使用link和@import有什么区别？
+
+- 区别1：`link` 是 **XHTML 标签**，除了加载 **CSS** 外，还可以定义 **RSS** 等其他事务；`@import `属于 **CSS** 范畴，只能加载 **CSS**。
+- 区别2：`link` 引用 **CSS** 时，在页面载入时同时加载；`@import`需要页面网页完全载入以后加载。
+  所以会出现一开始没有 **CSS** 样式，闪烁一下出现样式后的页面(网速慢的情况下)
+- 区别3：`link` 是XHTML标签，无兼容问题；`@import `是在 **CSS2.1** 提出的，低版本的浏览器不支持。
+- 区别4：`link` 支持使用 **Javascript** 控制 **DOM** 去改变样式；而`@import`不支持。
+
+
+
+# CSS 实现垂直水平居中
+
+> 不定宽高的盒子水平居中
+
+## 使用 flex 布局
+
+```css
+/*1.使用flex布局*/
+/*1.1方案*/
+/*设置父盒子：*/
+display:flex;
+justify-content:center;
+align-item:center;/*侧轴只有单个元素*/
+/*1.2方案（单个元素）*/
+/*设置父盒子：*/
+display:flex;
+/*设置要居中的DIV：*/
+margin:auto;
+
+
+
+```
+
+## 使用绝对定位配合 transform
+
+```css
+/*2.使用CSS3 transform*/
+/*设置父盒子：*/
+display:relative;
+/*设置要居中的DIV：*/
+transform:translate(-50%,-50%);
+top:50%;
+left50%;
+position:absolute;
+```
+
+## 使用表格布局
+
+```css
+/*3.使用display:table-cell方法(拓展)*/
+/*设置父盒子：*/
+display:table-cell;
+text-align:center;
+vertical-align:middle;
+/*设置要居中的DIV：*/
+display:inline-block;
+vertical-align:middle;
+```
+
+## 使用 grid 布局
+
+```css
+/*4.grid布局 (最新浏览器支持,只支持IE10及以上，兼容性不如flex优先使用flex)*/
+/*设置父盒子：*/
+display: grid;
+align-items:center;
+justify-content: center;
+```
+
+# 简述一下 src 与 href 的区别
+
+`href` 是指向「网络资源」所在位置，建立和当前元素（锚点）或当前文档（链接）之间的链接，用于超链接。
+
+`src`   是指向「外部资源」的位置，指向的内容将会嵌入到文档中当前标签所在位置；在请求 `src` 资源时会将其指向的资源下载并应用到文档内，例如 js脚本，img图片 和 frame等元素。
+
+当浏览器解析到该元素时，会暂停其他资源的下载和处理，直到将该资源加载、编译、执行完毕，图片和框架等元素也如此，类似于将所指向资源嵌入当前标签内。这也是为什么将 js脚本放在底部而不是头部。
+
+# px 和 em 的区别
+
+相同点：px 和 em 都是长度单位；
+
+异同点：px 的值是固定的，指定是多少就是多少，计算比较容易。em 的值不是固定的，并且 em 会继承父级元素的字体大小。
+
+浏览器的默认字体高都是16px。所以未经调整的浏览器都符合: 1em=16px。那么12px=0.75em, 10px=0.625em。
+
+px 是 CSS中的逻辑像素，和移动端的物理像素之间会有一个比值dpr。
+
+px 是固定的值,无论页面放大或者缩小都不会改变。
+em 是指相对于父元素的大小如果父元素的字体为 12px，那么子元素 1em 就是 24px。由于是相对父级的倍数，所以多层嵌套时，倍数关系的计算会很头痛。
+
+rem 中的 r 就是 root，也就是相对于 root元素(html标签) 的字体大小的倍数。如果不做任何修改，浏览器默认字体大小为 16px。
+
+默认情况下： 1 em = 10 px 、1 rem = 16 px
+
+# 什么叫优雅降级和渐进增强？
+
+**渐进增强** progressive enhancement：
+
+针对低版本浏览器进行构建页面，保证最基本的功能，然后再针对高级浏览器进行效果、交互等改进和追加功能达到更好的用户体验。
+
+**优雅降级** graceful degradation：
+
+一开始就构建完整的功能，然后再针对低版本浏览器进行兼容。
+
+**区别**：
+
+1. 优雅降级是从复杂的现状开始，并试图减少用户体验的供给
+
+2. 渐进增强则是从一个非常基础的，能够起作用的版本开始，并不断扩充，以适应未来环境的需要
+
+3. 降级（功能衰减）意味着往回看；而渐进增强则意味着朝前看，同时保证其根基处于安全地带
+
+# CSS的优先级是如何计算的？
+
+!important (正无穷) > 内联样式(1000) > #id(100) > .class(10)、属性(10)、伪类(10) > tag(1)、伪元素(1) > *(0)、相邻选择器、子代选择器
+
+## 权重值计算
+
+| 选择器                         | 案例          | 权重值   |
+| ------------------------------ | ------------- | -------- |
+| !important                     | !important    | Infinity |
+| 内联样式                       | style=".."    | 1000     |
+| ID                             | #id           | 100      |
+| class                          | .class        | 10       |
+| 属性                           | [type='text'] | 10       |
+| 伪类                           | :hover        | 10       |
+| 标签                           | p             | 1        |
+| 伪元素                         | ::first-line  | 1        |
+| 相邻选择器、子代选择器、通配符 | * > +         | 0        |
+
+## 比较规则
+
+- 1000>100。也就是说从左往右逐个等级比较，前一等级相等才往后比。
+- 在权重相同的情况下，后面的样式会覆盖掉前面的样式。
+- 继承属性没有权重值
+- 通配符、子选择器、相邻选择器等的。虽然权值为0，但是也比继承的样式优先。
+- ie6以上才支持`important`，并且尽量少用它。

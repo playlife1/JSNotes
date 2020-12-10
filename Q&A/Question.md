@@ -47,14 +47,17 @@ DOM事件和事件流
 
 - [x] 事件循环
 
+- [x] 
+  BFC
 
-BFC
 
-Flex
+- [x] Flex
+
 
 Promise原理以及手写代码promise(基本上要求可以手写Promise.all方法,这个问的最多)
 
-webpack 中 loader 和 plugin 的区别是什么 
+- [x] webpack 中 loader 和 plugin 的区别是什么 
+
 
 - [x] vue响应式原理
 
@@ -73,10 +76,11 @@ webpack 中 loader 和 plugin 的区别是什么
 
 常见算法(排序洗牌等)
 
-深拷贝和浅拷贝(也会问到JSON.stringify JSON.parse这种方案的弊端)
+- [x] 深拷贝和浅拷贝(也会问到JSON.stringify JSON.parse这种方案的弊端)
 
-实现一个call/bind(call,apply,bind区别)
-get 和 post 的区别
+
+- [ ] 实现一个call/bind(call,apply,bind区别)
+- [x] get 和 post 的区别
 
 
 
